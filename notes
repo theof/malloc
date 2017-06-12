@@ -2,3 +2,8 @@ mmap
 munmap
 getpagesize
 getrlimit
+
+TLPI:
+	7 - Malloc
+	29 - Threads
+	49 - Mmap
