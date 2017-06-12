@@ -1,0 +1,2 @@
+gcc -shared -o myuid.so myuid.c
+DYLD_LIBRARY_PATH=. DYLD_INSERT_LIBRARIES=malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 $1

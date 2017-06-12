@@ -1,0 +1,4 @@
+mmap
+munmap
+getpagesize
+getrlimit
