@@ -1,2 +1,5 @@
-gcc -shared -o myuid.so myuid.c
-DYLD_LIBRARY_PATH=. DYLD_INSERT_LIBRARIES=malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 $1
+#!/bin/sh 
+export DYLD_LIBRARY_PATH=.
+export DYLD_INSERT_LIBRARIES="libft_malloc.so" 
+export DYLD_FORCE_FLAT_NAMESPACE=1 
+$@
