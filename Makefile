@@ -12,10 +12,6 @@ ifeq ($(DEBUG),yes)
 else
 	CFLAGS += -O2 -DNDEBUG
 endif
-ifeq ($(SAN),yes)
-	LDFLAGS += -fsanitize=address
-	CFLAGS += -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls
-endif
 
 # Headers
 CFLAGS     += -I./include
