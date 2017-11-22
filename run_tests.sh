@@ -25,7 +25,7 @@ cleanup() {
 trap cleanup EXIT
 
 run () {
-	log Compiling $( basename "$1.test" )
+	log Compiling $( basename "$1" )
 	gcc -o "$1.test" "$1"
 	CURRENT_EXEC="$1.test"
 	log Running $( basename "${CURRENT_EXEC}" )
