@@ -1,7 +1,7 @@
 HOSTTYPE ?= $(shell uname -m)_$(shell uname -s)
 
 NAME   = libft_malloc.so
-CC     ?= clang # Need autoconf
+CC     ?= clang
 
 SUBNAME = libft_malloc_$(HOSTTYPE).so
 
@@ -70,7 +70,7 @@ $(BUILD_DIR):
 	@-mkdir -p $@
 
 check: $(NAME)
-	@echo no tests
+	@./run_tests.sh
 
 clean:
 	$(RM) -rf $(OBJ_PATH)
