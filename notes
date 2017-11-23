@@ -1,9 +1,41 @@
-mmap
-munmap
-getpagesize
-getrlimit
+Mmaping isnt suitable for a full malloc implementation compared to sbrking:
+	- Kernel fills mapped memory with zeroes by default, expensive.
+	- The way we let the kernel choose the map range in the address space
+allows memory fragmentation and duplicating bounds etc.
+Anyway it's required by the exercise ¯\_(ツ)_/¯
 
-TLPI:
-	7 - Malloc
-	29 - Threads
-	49 - Mmap
+=============================================================================
+
+HEAP_<SIZE>: [ FREE_LIST | [[ ZONE <-> ZONE <-> ZONE ] circular]]
+ZONE: [ ZONE_HEADER | BLOCK... not circular]
+ZONE_HEADER: [ prev: ZONE | next: ZONE ]
+BLOCK: [ BLOCK_HEADER | DATA | BLOCK_FOOTER]
+BLOCK_FOOTER: BLOCK_META
+BLOCK_HEADER: [ BLOCK_META | BLOCK_META.available ? FREE_LIST ]
+FREE_LIST: [ prev: BLOCK | next: BLOCK ]
+
+/!\ BLOCK_META: contains block size. A block should be 64bit padded.
+It allows us to use the 4 lsbytes to store ZONE_BOUNDARY and AVAILABLE flags.
+
+Malloc:
+	for block in free_list:
+		if block.header.size is ok:
+			split block in two and keep first one
+			update free list
+	else:
+		make_new_zone
+
+Free:
+
+	check next header and prev footer meta info:
+	if both are boundaries 
+	check previous block footer to get its header
+	with size get next block header
+
+
+	[p,n]: Availability
+	switch
+	[x,-]: increase prev.header.size by size.
+	[-,x]: replace next.header position in list and append its size to size. make self available.
+	[x,x]: perform above actions
+	[-,-]: inseret into free_list
