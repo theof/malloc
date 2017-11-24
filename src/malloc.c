@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 17:54:51 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/23 04:21:44 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/24 08:20:35 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 
 void	*malloc(size_t size)
 {
+	(void)size;
+	/*
 	t_zone	*zone;
 	t_block	*block;
 
@@ -29,4 +31,8 @@ void	*malloc(size_t size)
 			block = block_init_zone(zone, size);
 	}
 	return (block + sizeof(*block));
+	(void)size;
+	return NULL;
+	*/
+	return NULL;
 }

@@ -23,6 +23,8 @@ SOURCES    += calloc.c
 SOURCES	   += realloc.c
 SOURCES    += free.c
 SOURCES    += show_alloc_mem.c
+SOURCES    += zone.c
+SOURCES    += allocs.c
 
 
 # Generation

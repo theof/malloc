@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/12 13:17:40 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/22 01:31:33 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/24 06:06:15 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int main()
 {
-	char *str;
+/*	char *str;
 
 	str = malloc(5);
 	for (int i = 0; i < 5; i++)
 		str[i] = 0xFF;
 	free(str);
-	return(0);
+	return(0);*/
 }
