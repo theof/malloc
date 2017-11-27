@@ -26,7 +26,7 @@ trap cleanup EXIT
 
 run () {
 	log Compiling $( basename "$1" )
-	gcc -o "$1.test" "$1"
+	gcc -o "$1.test" "$1" -L./ -lft_malloc
 	CURRENT_EXEC="$1.test"
 	log Running $( basename "${CURRENT_EXEC}" )
 	${ENTRYPOINT} "${CURRENT_EXEC}"

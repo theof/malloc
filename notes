@@ -15,7 +15,7 @@ BLOCK_HEADER: [ BLOCK_META | BLOCK_META.available ? FREE_LIST ]
 FREE_LIST: [ prev: BLOCK | next: BLOCK ]
 
 /!\ BLOCK_META: contains block size. A block should be 64bit padded.
-It allows us to use the 4 lsbytes to store ZONE_BOUNDARY and AVAILABLE flags,
+It allows us to use the 3 lsbytes to store ZONE_BOUNDARY and AVAILABLE flags,
 and eventually to know whether a freed element is not fresh
 
 Malloc:

@@ -1,3 +1,6 @@
+# vim buffers
+**/.*.swp
+
 # Prerequisites
 *.d
 

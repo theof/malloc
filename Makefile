@@ -24,7 +24,9 @@ SOURCES	   += realloc.c
 SOURCES    += free.c
 SOURCES    += show_alloc_mem.c
 SOURCES    += zone.c
+SOURCES    += block.c
 SOURCES    += allocs.c
+SOURCES    += tools.c
 
 
 # Generation

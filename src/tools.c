@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nothing.c                                          :+:      :+:    :+:   */
+/*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/09/12 17:26:05 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/24 06:55:38 by tvallee          ###   ########.fr       */
+/*   Created: 2017/11/27 11:35:03 by tvallee           #+#    #+#             */
+/*   Updated: 2017/11/27 11:35:24 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
+#include "malloc.h"
 
-int main()
+size_t	align_size(size_t size, size_t alignment)
 {
-	char *ptr;
+	size_t	truncated;
 
-	ptr = malloc(0);
-	printf("%p\n", ptr);
-	free(ptr);
-	return(0);
+	truncated = size & (~(alignment - 1));
+	if (truncated < size)
+		return (truncated + alignment);
+	else
+		return (truncated);
 }

@@ -6,7 +6,7 @@
 /*   By: tvallee <tvallee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/05 16:42:41 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/24 08:30:22 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/27 22:03:16 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,17 @@
 # include <stdlib.h>
 # include <sys/resource.h>
 
-# define TINY_SIZE ((TINY_ZONE_SIZE - sizeof(t_zone)) / 100 - sizeof(t_block))
+# define FLOOR_8(x) (x & (~0x7))
+# define BLOCK_SIZE(x) FLOOR_8(x)
+
+# define BLOCK_MIN_SIZE (sizeof(t_block_free) + sizeof(t_block))
+
+# define TINY_SIZE (TINY_BLOCK_SIZE - 2 * sizeof(t_block))
+# define TINY_BLOCK_SIZE FLOOR_8((TINY_ZONE_SIZE - sizeof(t_zone)) / 100)
 # define TINY_ZONE_SIZE (32 * getpagesize())
-# define SMALL_SIZE ((SMALL_ZONE_SIZE - sizeof(t_zone)) / 100 - sizeof(t_block))
+
+# define SMALL_SIZE (SMALL_BLOCK_SIZE - 2 * sizeof(t_block))
+# define SMALL_BLOCK_SIZE FLOOR_8((SMALL_ZONE_SIZE - sizeof(t_zone)) / 100)
 # define SMALL_ZONE_SIZE (320 * getpagesize())
 
 # define PROT_READ_WRITE (PROT_READ | PROT_WRITE)
@@ -29,7 +37,7 @@
 # define TRUE 1
 # define FALSE 0
 
-typedef union	u_block_meta
+typedef union	u_block
 {
 	struct {
 		size_t	available : 1;
@@ -37,31 +45,20 @@ typedef union	u_block_meta
 		size_t	bound_right : 1;
 	}		flags;
 	size_t	size;
-}				t_block_meta;
-
-typedef struct	s_block
-{
-	t_block_meta	header;
-	char			payload[];
 }				t_block;
 
-/*
-** content is also footed by a t_block_meta
-*/
+typedef struct	s_block_free
+{
+	t_block				header;
+	struct s_block_free	*next;
+	struct s_block_free *prev;
+}				t_block_free;
 
 typedef struct	s_zone
 {
 	struct s_zone	*next;
 	struct s_zone	*prev;
-	t_block_meta	first_block[];
 }				t_zone;
-
-typedef struct	s_block_free
-{
-	t_block_meta		header;
-	struct s_block_free	*next;
-	struct s_block_free *prev;
-}				t_block_free;
 
 typedef struct	s_allocs
 {
@@ -69,18 +66,27 @@ typedef struct	s_allocs
 	t_block_free	*free_blocks;
 }				t_allocs;
 
-typedef struct	s_alloc_size
+typedef struct	s_alloc_zone
 {
-	size_t	payload;
-	size_t	zone;
-}				t_alloc_size;
+	size_t	alloc_type;
+	t_zone	*zone;
+}				t_alloc_zone;
 
 enum	e_allocs_sizes
 {
 	E_ALLOC_TINY = 0,
 	E_ALLOC_SMALL,
-	E_ALLOC_LARGE
+	E_ALLOC_LARGE,
+	E_ALLOC_NONE,
 };
+
+size_t			align_size(size_t size, size_t alignment);
+unsigned		allocs_get_type(size_t request_size);
+size_t			zone_map(t_zone **dst, size_t size, unsigned type);
+
+t_block			*get_next_block(t_block const *block);
+t_block			*block_init_zone(t_zone *zone, size_t zone_size, size_t size);
+size_t			block_size(size_t size);
 
 void			free(void *ptr);
 void			*malloc(size_t size);
