@@ -25,11 +25,11 @@
 
 # define TINY_SIZE (TINY_BLOCK_SIZE - 2 * sizeof(t_block))
 # define TINY_BLOCK_SIZE FLOOR_8((TINY_ZONE_SIZE - sizeof(t_zone)) / 100)
-# define TINY_ZONE_SIZE (32 * getpagesize())
+# define TINY_ZONE_SIZE (32 * (size_t)getpagesize())
 
 # define SMALL_SIZE (SMALL_BLOCK_SIZE - 2 * sizeof(t_block))
 # define SMALL_BLOCK_SIZE FLOOR_8((SMALL_ZONE_SIZE - sizeof(t_zone)) / 100)
-# define SMALL_ZONE_SIZE (320 * getpagesize())
+# define SMALL_ZONE_SIZE (320 * (size_t)getpagesize())
 
 # define PROT_READ_WRITE (PROT_READ | PROT_WRITE)
 # define MAP_ANON_PRIVATE (MAP_ANON | MAP_PRIVATE)
@@ -82,13 +82,19 @@ enum	e_allocs_sizes
 
 size_t			align_size(size_t size, size_t alignment);
 unsigned		allocs_get_type(size_t request_size);
+unsigned		allocs_get_type_by_zone_size(size_t zone_size);
+
 size_t			zone_map(t_zone **dst, size_t size, unsigned type);
+void			zone_unmap(t_zone *zone);
 
 t_block			*get_next_block(t_block const *block);
 size_t			block_size(size_t size);
 
 t_block_free	*block_init_zone(t_zone *zone, size_t zone_size, unsigned type);
 t_block			*block_create(t_block_free *available, size_t size, unsigned type);
+void			block_pop_free_list(t_block_free *block, unsigned type);
+void			block_push_free_list(t_block *block, unsigned type);
+void			block_copy_footer(t_block *block);
 t_block			*block_fit(size_t size, unsigned type);
 
 void			free(void *ptr);

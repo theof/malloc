@@ -36,3 +36,13 @@ unsigned	allocs_get_type(size_t request_size)
 	else
 		return (E_ALLOC_TINY);
 }
+
+unsigned	allocs_get_type_by_zone_size(size_t zone_size)
+{
+	if (zone_size == TINY_ZONE_SIZE)
+		return (E_ALLOC_TINY);
+	else if (zone_size == SMALL_ZONE_SIZE)
+		return (E_ALLOC_SMALL);
+	else
+		return (E_ALLOC_LARGE);
+}

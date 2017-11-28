@@ -22,7 +22,7 @@ void	*malloc(size_t size)
 	unsigned		type;
 	size_t			zone_size;
 
-	ft_putendl("entrypoint");
+	ft_putendl("malloc: ");
 	type = allocs_get_type(size);
 	block = block_fit(block_size(size), type);
 	if (block == NULL)
@@ -40,6 +40,8 @@ void	*malloc(size_t size)
 	ft_putstr(" : ");
 	ft_putnbr(size);
 	ft_putchar(10);
-	ft_putendl("exitpoint");
+	ft_putendl("finished");
+	ft_puthex((size_t)(block + 1));
+	ft_putendl(" block + 1");
 	return (block + 1);
 }

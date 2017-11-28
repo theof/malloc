@@ -35,6 +35,21 @@ static void	zone_push(t_zone *new, unsigned type)
 	*head = new;
 }
 
+static void	zone_pop(t_zone *zone, unsigned type)
+{
+	t_zone	**head;
+	
+	head = &(g_allocs[type].zones);
+	if (zone->next == zone)
+		*head = NULL;
+	else
+	{
+		zone->prev->next = zone->next;
+		zone->next->prev = zone->prev;
+		*head = zone->prev;
+	}
+}
+
 size_t		zone_map(t_zone **dst, size_t size, unsigned type)
 {
 	t_zone	*new;
@@ -51,4 +66,15 @@ size_t		zone_map(t_zone **dst, size_t size, unsigned type)
 		zone_push(new, type);
 	*dst = new;
 	return (zone_size);
+}
+
+void		zone_unmap(t_zone *zone)
+{
+	size_t		zone_size;
+	unsigned	type;
+	
+	zone_size = sizeof(t_zone) + BLOCK_SIZE(((t_block*)(zone + 1))->size);
+	type = allocs_get_type_by_zone_size(zone_size);
+	zone_pop(zone, type);
+	munmap(zone, zone_size);
 }
