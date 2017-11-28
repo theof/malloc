@@ -15,26 +15,29 @@
 
 extern t_allocs	g_allocs[3];
 
-static void	insert_zone(t_zone *head, t_zone *new)
+static void	zone_push(t_zone *new, unsigned type)
 {
-	if (head != NULL)
+	t_zone	**head;
+
+	head = &(g_allocs[type].zones);
+	if (*head != NULL)
 	{
-		new->prev = head->prev;
-		new->next = head;
-		head->prev->next = new;
-		head->prev = new;
+		new->prev = (*head)->prev;
+		new->next = (*head);
+		(*head)->prev->next = new;
+		(*head)->prev = new;
 	}
 	else
 	{
 		new->prev = new;
 		new->next = new;
 	}
+	*head = new;
 }
 
 size_t		zone_map(t_zone **dst, size_t size, unsigned type)
 {
 	t_zone	*new;
-	t_zone	**head;
 	size_t	zone_size;
 
 	if (type == E_ALLOC_LARGE)
@@ -44,10 +47,8 @@ size_t		zone_map(t_zone **dst, size_t size, unsigned type)
 	else
 		zone_size = TINY_ZONE_SIZE;
 	new = mmap(0, zone_size, PROT_READ_WRITE, MAP_ANON_PRIVATE, -1, 0);
-	head = &(g_allocs[type].zones);
 	if (new != NULL)
-		insert_zone(*head, new);
+		zone_push(new, type);
 	*dst = new;
-	*head = new;
 	return (zone_size);
 }

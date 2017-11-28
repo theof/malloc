@@ -33,10 +33,6 @@ size_t	get_n_zones(void)
 			count++;
 			while (link != head)
 			{
-				ft_puthex((size_t)link);
-				ft_putchar(10);
-				ft_puthex((size_t)head);
-				ft_putchar(10);
 				link = link->next;
 				count++;
 			}
@@ -56,15 +52,18 @@ void	array_fill(t_alloc_zone *array)
 	while (type <= E_ALLOC_LARGE)
 	{
 		head = g_allocs[type].zones;
-		if (head == NULL)
-			continue ;
-		link = head->next;
-		while (link != head)
+		if (head != NULL)
 		{
-			link = link->next;
-			array->zone = link;
-			array->alloc_type = type;
-			array++;
+			link = head->next;
+			while (1)
+			{
+				array->zone = link;
+				array->alloc_type = type;
+				array++;
+				link = link->next;
+				if (link == head)
+					break;
+			}
 		}
 		type++;
 	}
@@ -106,14 +105,31 @@ size_t	print_block(t_block *block)
 		ft_puthex((size_t)(block + 1));
 		ft_putstr(" - ");
 		ft_puthex((size_t)((char*)(block + 1) + size));
+		ft_putstr(" : ");
+		ft_putnbr(size); /* FIXME overflows int */
+		ft_putstr(" bytes\n");
 	}
 	if (!block->flags.bound_right)
 	{
 		block = get_next_block(block);
-		if (block)
+		if (block != NULL)
 			size += print_block(block);
 	}
 	return (size);
+}
+
+void	print_zone_header(t_alloc_zone alloc)
+{
+	char	*strings[] = {
+		"TINY",
+		"SMALL",
+		"LARGE"
+	};
+
+	ft_putstr(strings[alloc.alloc_type]);
+	ft_putstr(" : ");
+	ft_puthex((size_t)alloc.zone);
+	ft_putchar(10);
 }
 
 void	show_alloc_mem(void)
@@ -131,8 +147,9 @@ void	show_alloc_mem(void)
 	array_awesome_sort(array);
 	total = 0;
 	i = 0;
-	while ((array + i)->alloc_type != E_ALLOC_NONE)
+	while (array[i].alloc_type != E_ALLOC_NONE)
 	{
+		print_zone_header(array[i]);
 		total += print_block((t_block*)(array[i].zone + 1));
 		i++;
 	}

@@ -85,8 +85,11 @@ unsigned		allocs_get_type(size_t request_size);
 size_t			zone_map(t_zone **dst, size_t size, unsigned type);
 
 t_block			*get_next_block(t_block const *block);
-t_block			*block_init_zone(t_zone *zone, size_t zone_size, size_t size);
 size_t			block_size(size_t size);
+
+t_block_free	*block_init_zone(t_zone *zone, size_t zone_size, unsigned type);
+t_block			*block_create(t_block_free *available, size_t size, unsigned type);
+t_block			*block_fit(size_t size, unsigned type);
 
 void			free(void *ptr);
 void			*malloc(size_t size);
