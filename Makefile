@@ -19,7 +19,6 @@ CFLAGS     += -I./include
 # Sources
 SRC_PATH   += src
 SOURCES    += malloc.c
-SOURCES    += calloc.c
 SOURCES	   += realloc.c
 SOURCES    += free.c
 SOURCES    += show_alloc_mem.c
