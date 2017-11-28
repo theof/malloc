@@ -26,7 +26,7 @@ static t_block	*coalesce_right(t_block *current, unsigned type)
 	current->size = BLOCK_SIZE(old.size) + BLOCK_SIZE(next->header.size);
 	current->flags.available = TRUE;
 	current->flags.bound_left = old.flags.bound_left;
-	current->flags.bound_right = old.flags.bound_right;
+	current->flags.bound_right = next->header.flags.bound_right;
 	block_copy_footer(current);
 	block_push_free_list(current, type);
 	return (current);

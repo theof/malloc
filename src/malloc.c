@@ -23,7 +23,7 @@ void	*malloc(size_t size)
 	size_t			zone_size;
 
 	ft_putendl("malloc: ");
-	type = allocs_get_type(size);
+	type = allocs_get_type(block_size(size));
 	block = block_fit(block_size(size), type);
 	if (block == NULL)
 	{
