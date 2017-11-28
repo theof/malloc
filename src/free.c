@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/06/12 19:36:06 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/28 22:53:44 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,42 +61,11 @@ static t_block	*coalesce(t_block *current, int prev_free,
 			current->flags.available = TRUE;
 			block_copy_footer(current);
 			block_push_free_list(current, type);
+			ft_putnbr(current->size);
+			ft_putendl(" current->size");
 			return (current);
 		}
 	}
-}
-
-static int		memory_is_ours(void *ptr)
-{
-	t_block		*block;
-	unsigned	type;
-	t_zone		*head;
-	t_zone		*current_zone;
-	t_block		*current_block;
-	
-	block = (t_block*)ptr - 1;
-	type = 0;
-	while (type < E_ALLOC_NONE)
-	{
-		if ((head = g_allocs[type].zones) == NULL)
-			return FALSE;
-		current_zone = head;
-		while (1)
-		{
-			current_block = (t_block*)(head + 1);
-			while (current_block != NULL)
-			{
-				if (current_block == block)
-					return TRUE;
-				current_block = get_next_block(current_block);
-			}
-			current_zone = current_zone->next;
-			if (current_zone == head)
-				break ;
-		}
-		type++;
-	}
-	return (FALSE);
 }
 
 void	free(void *ptr)
@@ -106,7 +75,9 @@ void	free(void *ptr)
 	t_block		*current;
 	unsigned	type;
 	
-	if (memory_is_ours(ptr) == FALSE)
+	ft_putchar(10);
+	ft_putendl("free: ");
+	if (ptr == NULL || allocs_is_ours(ptr) == FALSE)
 		return ;
 	current = (t_block*)((char*)ptr - sizeof(t_block));
 	type = allocs_get_type(BLOCK_SIZE(current->size) - 2 * sizeof(t_block));
@@ -119,8 +90,17 @@ void	free(void *ptr)
 	else
 		next_free = get_next_block(current)->flags.bound_right;
 	current = coalesce(current, prev_free, next_free, type);
+	ft_putstr("freed block: ");
+	ft_puthex((size_t)(current));
+	ft_putchar(10);
 	if (current->flags.bound_left && current->flags.bound_right)
+	{
 		zone_unmap((t_zone*)((char*)current - sizeof(t_zone)));
-	ft_putendl("free finished");
+		ft_putstr("removing zone: ");
+		ft_puthex((size_t)((char*)current - sizeof(t_zone)));
+		ft_putstr(" type: ");
+		ft_putnbr(type);
+		ft_putchar(10);
+	}
 	return ;
 }

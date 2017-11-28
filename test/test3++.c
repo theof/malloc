@@ -15,6 +15,7 @@ int main()
 	char *addr2;
 	char *addr3;
 
+	write(1, "main\n", 5);
 	addr1 = (char*)malloc(16*M);
 	strcpy(addr1, "Bonjours\n");
 	print(addr1);

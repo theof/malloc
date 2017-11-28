@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 18:03:45 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/22 02:03:19 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/28 23:06:30 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,29 @@
 #include <unistd.h>
 #include "libft.h"
 
-static t_block	*block_shrink(t_block *block, size_t size)
+static t_block	*block_shrink(t_block *block, size_t size, unsigned type)
 {
-	t_block	*next
+	t_block	*next;
+	t_block	old;
+	size_t	extra_space;
+
+	extra_space = BLOCK_SIZE(block->size) - size;
+	if (allocs_assert_block_size_type(extra_space, type))
+	{
+		next = (t_block*)((char*)block + size);
+		next->size = extra_space;
+		next->flags.bound_left = FALSE;
+		next->flags.bound_right = block->flags.bound_right;
+		next->flags.available = FALSE;
+		block_copy_footer(next);
+		old = *block;
+		block->size = size;
+		block->flags.bound_left = old.flags.bound_left;
+		block->flags.available = FALSE;
+		block_copy_footer(next);
+		free(next);
+	}
+	return (block);
 }
 
 static t_block	*block_enlarge(t_block *block, size_t diff, unsigned type)
@@ -56,6 +76,17 @@ void			*realloc(void *ptr, size_t size)
 	void		*new;
 	unsigned	type;
 
+	ft_putchar(10);
+	ft_putendl("realloc: ");
+	if (ptr == NULL)
+		return (malloc(size));
+	if (allocs_is_ours(ptr) == FALSE)
+	{
+		ft_putstr("not ours: ");
+		ft_puthex((size_t)ptr);
+		ft_putchar(10);
+		return (NULL);
+	}
 	block = (t_block*)ptr - 1;
 	size = block_size(size);
 	type = common_alloc_type(BLOCK_SIZE(block->size), size);
@@ -75,5 +106,6 @@ void			*realloc(void *ptr, size_t size)
 		ft_memcpy(new, ptr, BLOCK_SIZE(block->size) - 2 * sizeof(t_block));
 		free(ptr);
 	}
+	ft_putendl("end realloc");
 	return (new);
 }

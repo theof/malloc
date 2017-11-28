@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 03:21:47 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/27 22:31:38 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/28 23:22:59 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ void	block_push_free_list(t_block *block, unsigned type)
 	{
 		current->prev = (*head)->prev;
 		current->next = (*head);
+		ft_puthex((size_t)(*head)->prev);
+		ft_putendl(" (*head)->prev");
+		ft_puthex((size_t)(*head)->prev->next);
+		ft_putendl(" (*head)->prev->next");
 		(*head)->prev->next = current;
 		(*head)->prev = current;
 	}
@@ -86,7 +90,7 @@ t_block	*block_create(t_block_free *available, size_t size, unsigned type)
 	t_block			old;
 	
 	extra_space = BLOCK_SIZE(available->header.size) - size;
-	if (extra_space > BLOCK_MIN_SIZE)
+	if (allocs_assert_block_size_type(extra_space, type))
 	{
 		old = *((t_block*)available);
 		block_pop_free_list(available, type);
