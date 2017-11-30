@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 03:21:47 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/28 23:22:59 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/30 13:58:49 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ void	block_push_free_list(t_block *block, unsigned type)
 	{
 		current->prev = (*head)->prev;
 		current->next = (*head);
-		ft_puthex((size_t)(*head)->prev);
+		/*ft_puthex((size_t)(*head)->prev);
 		ft_putendl(" (*head)->prev");
 		ft_puthex((size_t)(*head)->prev->next);
-		ft_putendl(" (*head)->prev->next");
+		ft_putendl(" (*head)->prev->next");*/
 		(*head)->prev->next = current;
 		(*head)->prev = current;
 	}

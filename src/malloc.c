@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 17:54:51 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/28 23:28:32 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/30 13:56:03 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	*malloc(size_t size)
 	unsigned		type;
 	size_t			zone_size;
 
-	ft_putchar(10);
-	ft_putendl("malloc: ");
+	//ft_putchar(10);
+	//ft_putendl("malloc: ");
 	type = allocs_get_type(block_size(size));
 	block = block_fit(block_size(size), type);
 	if (block == NULL)
@@ -35,26 +35,26 @@ void	*malloc(size_t size)
 		}
 		else
 		{
-			ft_putstr("new zone: ");
-			ft_puthex((size_t)zone);
-			ft_putstr(" size: ");
-			ft_putnbr(zone_size);
-			ft_putstr(" type: ");
-			ft_putnbr(type);
-			ft_putendl("");
+			//ft_putstr("new zone: ");
+			//ft_puthex((size_t)zone);
+			//ft_putstr(" size: ");
+			//ft_putnbr(zone_size);
+			//ft_putstr(" type: ");
+			//ft_putnbr(type);
+			//ft_putendl("");
 			available = block_init_zone(zone, zone_size, type);
 			block = block_create(available, block_size(size), type);
 		}
 	}
 	else
 	{
-		ft_putstr("new block: ");
-		ft_puthex((size_t)block);
-		ft_putstr(" size: ");
-		ft_putnbr(block->size);
-		ft_putstr(" type: ");
-		ft_putnbr(type);
-		ft_putchar(10);
+		//ft_putstr("new block: ");
+		//ft_puthex((size_t)block);
+		//ft_putstr(" size: ");
+		//ft_putnbr(block->size);
+		//ft_putstr(" type: ");
+		//ft_putnbr(type);
+		//ft_putchar(10);
 	}
 	return (block + 1);
 }

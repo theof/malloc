@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 22:07:52 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/28 23:45:40 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/30 13:58:19 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ static void	zone_push(t_zone *new, unsigned type)
 		new->next = new;
 	}
 	*head = new;
+	/*
+	ft_puthex((size_t)*head);
+	ft_putendl(" head");
+	ft_puthex((size_t)(*head)->prev);
+	ft_putendl(" (*head)->prev");
+	ft_puthex((size_t)(*head)->next);
+	ft_putendl(" (*head)->next");
+	*/
 }
 
 static void	zone_pop(t_zone *zone, unsigned type)

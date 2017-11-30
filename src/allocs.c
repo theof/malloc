@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 08:14:23 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/28 23:20:39 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/30 13:24:10 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,12 @@ int		allocs_is_ours(void *ptr)
 	{
 		if ((head = g_allocs[type].zones) != NULL)
 		{
-			ft_putendl("new type !");
 			current_zone = head;
 			while (1)
 			{
-				ft_putendl("new_zone !");
-				current_block = (t_block*)(head + 1);
+				current_block = (t_block*)(current_zone + 1);
 				while (current_block != NULL)
 				{
-					ft_puthex((size_t)current_block);
-					ft_putchar(10);
 					if (current_block == block)
 						return (TRUE);
 					current_block = get_next_block(current_block);
@@ -94,4 +90,3 @@ int		allocs_is_ours(void *ptr)
 	}
 	return (FALSE);
 }
-

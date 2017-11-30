@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:13:30 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/27 23:02:22 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/30 13:09:31 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ size_t	get_n_zones(void)
 		head = g_allocs[type].zones;
 		if (head != NULL)
 		{
-			link = head->next;
-			count++;
-			while (link != head)
+			link = head;
+			while (1)
 			{
-				link = link->next;
 				count++;
+				link = link->next;
+				if (link == head)
+					break;
 			}
 		}
 		type++;
@@ -54,7 +55,7 @@ void	array_fill(t_alloc_zone *array)
 		head = g_allocs[type].zones;
 		if (head != NULL)
 		{
-			link = head->next;
+			link = head;
 			while (1)
 			{
 				array->zone = link;
