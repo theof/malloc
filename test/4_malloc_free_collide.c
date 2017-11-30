@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 15:32:25 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 16:24:22 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/30 17:52:06 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,14 @@ int main()
 	char	*large;
 
 	write(1, "begin test\n", 11);
+
+	printf("TINY_SIZE: %zu\n", TINY_SIZE);
+	printf("TINY_BLOCK_SIZE: %zu\n", TINY_BLOCK_SIZE);
+	printf("TINY_ZONE_SIZE: %zu\n", TINY_ZONE_SIZE);
+	printf("SMALL_SIZE: %zu\n", SMALL_SIZE);
+	printf("SMALL_BLOCK_SIZE: %zu\n", SMALL_BLOCK_SIZE);
+	printf("SMALL_ZONE_SIZE: %zu\n", SMALL_ZONE_SIZE);
+	
 	get_space(ptr);
 	free(ptr[0]);
 	free(ptr[1]);

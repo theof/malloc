@@ -1,3 +1,7 @@
+# contrib executable
+contrib/a.out
+brutalize
+
 # vim buffers
 **/.*.swp
 
