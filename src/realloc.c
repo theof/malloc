@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 18:03:45 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 13:57:00 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/30 15:16:09 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,10 @@ void			*realloc(void *ptr, size_t size)
 	void		*new;
 	unsigned	type;
 
-	//ft_putchar(10);
-	//ft_putendl("realloc: ");
 	if (ptr == NULL)
 		return (malloc(size));
 	if (allocs_is_ours(ptr) == FALSE)
 	{
-		//ft_putstr("not ours: ");
-		//ft_puthex((size_t)ptr);
-		//ft_putchar(10);
 		return (NULL);
 	}
 	block = (t_block*)ptr - 1;
@@ -106,6 +101,5 @@ void			*realloc(void *ptr, size_t size)
 		ft_memcpy(new, ptr, BLOCK_SIZE(block->size) - 2 * sizeof(t_block));
 		free(ptr);
 	}
-	//ft_putendl("end realloc");
 	return (new);
 }
