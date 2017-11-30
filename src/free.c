@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 15:15:14 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/30 16:23:00 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ static t_block	*coalesce_left(t_block *current, unsigned type)
 	t_block	*prev;
 	size_t	prev_size;
 	
+	current->flags.available = TRUE;
+	block_copy_footer(current);
+	block_push_free_list(current, type);
 	prev_size = BLOCK_SIZE((current - 1)->size);
 	prev = (t_block*)((char*)current - prev_size);
 	return (coalesce_right(prev, type));
@@ -75,6 +78,8 @@ void	free(void *ptr)
 	
 	if (ptr == NULL || allocs_is_ours(ptr) == FALSE)
 		return ;
+	ft_putstr("free: ");
+	ft_puthex((size_t)ptr);
 	current = (t_block*)((char*)ptr - sizeof(t_block));
 	type = allocs_get_type(BLOCK_SIZE(current->size) - 2 * sizeof(t_block));
 	if (current->flags.bound_left)
@@ -86,9 +91,11 @@ void	free(void *ptr)
 	else
 		next_free = get_next_block(current)->flags.bound_right;
 	current = coalesce(current, prev_free, next_free, type);
+	ft_putendl("pute");
 	if (current->flags.bound_left && current->flags.bound_right)
 	{
 		zone_unmap((t_zone*)((char*)current - sizeof(t_zone)));
 	}
+	ft_putendl("ok !");
 	return ;
 }
