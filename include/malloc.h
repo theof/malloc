@@ -6,7 +6,7 @@
 /*   By: tvallee <tvallee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/05 16:42:41 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 14:23:07 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/11/30 18:01:41 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@
 # define BLOCK_MIN_SIZE (sizeof(t_block_free) + sizeof(t_block))
 
 # define TINY_SIZE (TINY_BLOCK_SIZE - 2 * sizeof(t_block))
-# define TINY_BLOCK_SIZE FLOOR_8((TINY_ZONE_SIZE - sizeof(t_zone)) / 100)
-# define TINY_ZONE_SIZE (32 * (size_t)getpagesize())
+# define TINY_BLOCK_SIZE FLOOR_8((TINY_ZONE_SIZE - sizeof(t_zone)) / 102)
+# define TINY_ZONE_SIZE (2 * (size_t)getpagesize())
 
 # define SMALL_SIZE (SMALL_BLOCK_SIZE - 2 * sizeof(t_block))
-# define SMALL_BLOCK_SIZE FLOOR_8((SMALL_ZONE_SIZE - sizeof(t_zone)) / 100)
-# define SMALL_ZONE_SIZE (320 * (size_t)getpagesize())
+# define SMALL_BLOCK_SIZE FLOOR_8((SMALL_ZONE_SIZE - sizeof(t_zone)) / 126)
+# define SMALL_ZONE_SIZE (32 * (size_t)getpagesize())
 
 # define PROT_READ_WRITE (PROT_READ | PROT_WRITE)
 # define MAP_ANON_PRIVATE (MAP_ANON | MAP_PRIVATE)
