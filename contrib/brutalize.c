@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 18:05:32 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 18:40:52 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/04 13:20:46 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int main()
 	void		**ptr;
 	uint32_t	rand;
 
+	write(1, "====BEGIN BRUTALIZE====\n", sizeof("====BEGIN BRUTALIZE===="));
 	while (1)
 	{
 

@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 18:03:45 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/01 12:45:32 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/04 13:33:27 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ static t_block	*block_shrink(t_block *block, size_t size, unsigned type)
 		next->flags.bound_left = FALSE;
 		next->flags.bound_right = block->flags.bound_right;
 		next->flags.available = FALSE;
-		block_copy_footer(next);
+		block_update_footer(next);
 		old = *block;
 		block->size = size;
 		block->flags.bound_left = old.flags.bound_left;
 		block->flags.available = FALSE;
-		block_copy_footer(next);
+		block_update_footer(next);
 		free(next);
 	}
 	return (block);
@@ -50,7 +50,7 @@ static t_block	*block_enlarge(t_block *block, size_t diff, unsigned type)
 	{
 		block_create((t_block_free*)next, diff, type);
 		block->size += diff;
-		block_copy_footer(block);
+		block_update_footer(block);
 		return (block);
 	}
 	return (NULL);
@@ -88,7 +88,7 @@ void			*realloc(void *ptr, size_t size)
 	block = (t_block*)ptr - 1;
 	size = block_size(size);
 	type = common_alloc_type(BLOCK_SIZE(block->size), size);
-	if (type != E_ALLOC_NONE)
+	if (type != E_ALLOC_NONE && 0)
 	{
 		if (size < BLOCK_SIZE(block->size))
 		{
@@ -100,10 +100,12 @@ void			*realloc(void *ptr, size_t size)
 			ft_putendl(" NO CHANGE");
 			return (ptr);
 		}
-		ft_putendl(" ENLARGED");
 		resized = block_enlarge(block, diff, type);
 		if (resized != NULL)
+		{
+			ft_putendl(" ENLARGED");
 			return (ptr);
+		}
 	}
 	ft_putendl(" NEW MALLOC");
 	new = malloc(size);

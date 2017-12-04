@@ -6,7 +6,7 @@
 /*   By: tvallee <tvallee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/05 16:42:41 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 18:01:41 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/04 13:15:00 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_block_free	*block_init_zone(t_zone *zone, size_t zone_size, unsigned type);
 t_block			*block_create(t_block_free *available, size_t size, unsigned type);
 void			block_pop_free_list(t_block_free *block, unsigned type);
 void			block_push_free_list(t_block *block, unsigned type);
-void			block_copy_footer(t_block *block);
+void			block_update_footer(t_block *block);
 t_block			*block_fit(size_t size, unsigned type);
 
 void			free(void *ptr);

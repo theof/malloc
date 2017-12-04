@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/01 15:13:07 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/04 13:14:26 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_block	*coalesce_right(t_block *current, unsigned type)
 	current->flags.available = TRUE;
 	current->flags.bound_left = old.flags.bound_left;
 	current->flags.bound_right = next->header.flags.bound_right;
-	block_copy_footer(current);
+	block_update_footer(current);
 	block_push_free_list(current, type);
 	return (current);
 }
@@ -38,7 +38,7 @@ static t_block	*coalesce_left(t_block *current, unsigned type)
 	size_t	prev_size;
 	
 	current->flags.available = TRUE;
-	block_copy_footer(current);
+	block_update_footer(current);
 	block_push_free_list(current, type);
 	prev_size = BLOCK_SIZE((current - 1)->size);
 	prev = (t_block*)((char*)current - prev_size);
@@ -62,7 +62,7 @@ static t_block	*coalesce(t_block *current, int prev_free,
 		else
 		{
 			current->flags.available = TRUE;
-			block_copy_footer(current);
+			block_update_footer(current);
 			block_push_free_list(current, type);
 			return (current);
 		}
@@ -76,6 +76,7 @@ void	free(void *ptr)
 	t_block		*current;
 	unsigned	type;
 	
+	return ;
 	ft_putstr("free: ");
 	ft_puthex((size_t)ptr);
 	if (ptr == NULL || allocs_is_ours(ptr) == FALSE)

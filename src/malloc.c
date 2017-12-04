@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 17:54:51 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/01 12:44:43 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/04 13:22:39 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void	*malloc(size_t size)
 	unsigned		type;
 	size_t			zone_size;
 
-	ft_putstr("malloc: ");
+	ft_putstr("malloc(");
+	ft_putnbr(size);
+	ft_putstr("): ");
 	type = allocs_get_type(block_size(size));
 	block = block_fit(block_size(size), type);
 	if (block == NULL)

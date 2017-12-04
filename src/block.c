@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 03:21:47 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 15:14:35 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/04 12:08:57 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	block_pop_free_list(t_block_free *block, unsigned type)
 	}
 }
 
-void	block_copy_footer(t_block *block)
+void	block_update_footer(t_block *block)
 {
 	t_block	*footer;
 	
@@ -93,12 +93,12 @@ t_block	*block_create(t_block_free *available, size_t size, unsigned type)
 		new = (t_block*)available;
 		new->size = size;
 		new->flags.bound_left = old.flags.bound_left;
-		block_copy_footer(new);
+		block_update_footer(new);
 		remaining = (t_block*)((char*)available + size);
 		remaining->size = extra_space;
 		remaining->flags.bound_right = old.flags.bound_right;
 		remaining->flags.available = TRUE;
-		block_copy_footer(remaining);
+		block_update_footer(remaining);
 		block_push_free_list(remaining, type);
 	}
 	else
@@ -106,7 +106,7 @@ t_block	*block_create(t_block_free *available, size_t size, unsigned type)
 		new = (t_block*)available;
 		available->header.flags.available = FALSE;
 		block_pop_free_list(available, type);
-		block_copy_footer((t_block*)available);
+		block_update_footer((t_block*)available);
 	}
 	return (new);
 }
@@ -120,7 +120,7 @@ t_block_free	*block_init_zone(t_zone *zone, size_t zone_size, unsigned type)
 	request->flags.bound_right = TRUE;
 	request->flags.bound_left = TRUE;
 	request->flags.available = TRUE;
-	block_copy_footer(request);
+	block_update_footer(request);
 	block_push_free_list(request, type);
 	return ((t_block_free*)request);
 }
