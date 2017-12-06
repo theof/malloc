@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/04 13:14:26 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/06 22:39:19 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,60 +14,6 @@
 #include "libft.h"
 
 extern t_allocs g_allocs[3];
-
-static t_block	*coalesce_right(t_block *current, unsigned type)
-{
-	t_block_free	*next;
-	t_block			old;
-
-	next = (t_block_free*)get_next_block(current);
-	block_pop_free_list(next, type);
-	old = *current;
-	current->size = BLOCK_SIZE(old.size) + BLOCK_SIZE(next->header.size);
-	current->flags.available = TRUE;
-	current->flags.bound_left = old.flags.bound_left;
-	current->flags.bound_right = next->header.flags.bound_right;
-	block_update_footer(current);
-	block_push_free_list(current, type);
-	return (current);
-}
-
-static t_block	*coalesce_left(t_block *current, unsigned type)
-{
-	t_block	*prev;
-	size_t	prev_size;
-	
-	current->flags.available = TRUE;
-	block_update_footer(current);
-	block_push_free_list(current, type);
-	prev_size = BLOCK_SIZE((current - 1)->size);
-	prev = (t_block*)((char*)current - prev_size);
-	return (coalesce_right(prev, type));
-}
-
-static t_block	*coalesce(t_block *current, int prev_free,
-		int next_free, unsigned type)
-{
-	if (prev_free == TRUE)
-	{
-		if (next_free == TRUE)
-			return (coalesce_left(coalesce_right(current, type), type));
-		else
-			return (coalesce_left(current, type));
-	}
-	else
-	{
-		if (next_free == TRUE)
-			return (coalesce_right(current, type));
-		else
-		{
-			current->flags.available = TRUE;
-			block_update_footer(current);
-			block_push_free_list(current, type);
-			return (current);
-		}
-	}
-}
 
 void	free(void *ptr)
 {
@@ -77,28 +23,24 @@ void	free(void *ptr)
 	unsigned	type;
 	
 	return ;
-	ft_putstr("free: ");
-	ft_puthex((size_t)ptr);
 	if (ptr == NULL || allocs_is_ours(ptr) == FALSE)
 	{
-		ft_putendl("not ours\n");
 		return ;
 	}
-	current = (t_block*)((char*)ptr - sizeof(t_block));
-	type = allocs_get_type(BLOCK_SIZE(current->size) - 2 * sizeof(t_block));
+	current = (t_block*)ptr - 1;
+	type = allocs_get_type_block(BLOCK_SIZE(current->size));
 	if (current->flags.bound_left)
 		prev_free = FALSE;
 	else
-		prev_free = (current - 1)->flags.bound_left;
+		prev_free = (current - 1)->flags.available;
 	if (current->flags.bound_right)
 		next_free = FALSE;
 	else
-		next_free = get_next_block(current)->flags.bound_right;
+		next_free = get_next_block(current)->flags.available;
 	current = coalesce(current, prev_free, next_free, type);
 	if (current->flags.bound_left && current->flags.bound_right)
 	{
-		zone_unmap((t_zone*)((char*)current - sizeof(t_zone)));
+		zone_unmap((t_zone*)current - 1);
 	}
-	ft_putendl("OK !\n");
 	return ;
 }

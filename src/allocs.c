@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 08:14:23 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 13:24:10 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/06 19:58:19 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ unsigned	allocs_get_type(size_t request_size)
 		return (E_ALLOC_TINY);
 }
 
-unsigned	allocs_get_type_by_zone_size(size_t zone_size)
+unsigned	allocs_get_type_zone(size_t zone_size)
 {
 	if (zone_size == TINY_ZONE_SIZE)
 		return (E_ALLOC_TINY);
@@ -48,11 +48,21 @@ unsigned	allocs_get_type_by_zone_size(size_t zone_size)
 		return (E_ALLOC_LARGE);
 }
 
-int			allocs_assert_block_size_type(size_t size, unsigned type)
+unsigned	allocs_get_type_block(size_t block_size)
 {
-	if (size < BLOCK_MIN_SIZE)
+	if (block_size > SMALL_BLOCK_SIZE)
+		return (E_ALLOC_LARGE);
+	else if (block_size > TINY_BLOCK_SIZE)
+		return (E_ALLOC_SMALL);
+	else
+		return (E_ALLOC_TINY);
+}
+
+int			allocs_assert_available_block_type(size_t available, unsigned type)
+{
+	if (available < BLOCK_MIN_SIZE)
 		return (FALSE);
-	if (allocs_get_type(size) < type)
+	if (allocs_get_type_block(available) < type)
 		return (FALSE);
 	return (TRUE);
 }

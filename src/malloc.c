@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 17:54:51 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/04 13:22:39 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/06 23:54:32 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,22 @@ void	*malloc(size_t size)
 	t_block_free	*available;
 	unsigned		type;
 	size_t			zone_size;
+	static size_t	count = 0;
 
-	ft_putstr("malloc(");
-	ft_putnbr(size);
-	ft_putstr("): ");
-	type = allocs_get_type(block_size(size));
-	block = block_fit(block_size(size), type);
+	size = block_size(size);
+	type = allocs_get_type_block(size);
+	if (type == 0)
+	{
+		ft_putstr("malloc(");
+		ft_putnbr(size);
+		ft_putstr("): ");
+		ft_putnbr(TINY_ZONE_SIZE);
+		ft_putendl(" tiny zone");
+		count += size;
+		ft_putnbr(count);
+		ft_putendl(" count");
+	}
+	block = block_fit(size, type);
 	if (block == NULL)
 	{
 		ft_putendl(" create zone");
@@ -38,7 +48,7 @@ void	*malloc(size_t size)
 		else
 		{
 			available = block_init_zone(zone, zone_size, type);
-			block = block_create(available, block_size(size), type);
+			block = block_create(available, size, type);
 		}
 	}
 	ft_puthex((size_t)(block + 1));

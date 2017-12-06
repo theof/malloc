@@ -5,7 +5,7 @@ CC     ?= clang
 
 SUBNAME = libft_malloc_$(HOSTTYPE).so
 
-CFLAGS = -g -Wall -Werror -Wextra
+CFLAGS = -g -Wall -Wextra
 CFLAGS += -std=c11 -pedantic -pedantic-errors
 ifeq ($(DEBUG),yes)
 	CFLAGS += -g3 -O0 -fno-inline

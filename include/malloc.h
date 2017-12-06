@@ -6,7 +6,7 @@
 /*   By: tvallee <tvallee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/05 16:42:41 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/04 13:15:00 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/06 20:24:27 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,9 @@ enum	e_allocs_sizes
 
 size_t			align_size(size_t size, size_t alignment);
 unsigned		allocs_get_type(size_t request_size);
-unsigned		allocs_get_type_by_zone_size(size_t zone_size);
-int				allocs_assert_block_size_type(size_t size, unsigned type);
+unsigned		allocs_get_type_zone(size_t zone_size);
+unsigned		allocs_get_type_block(size_t block_size);
+int				allocs_assert_available_block_type(size_t size, unsigned type);
 int				allocs_is_ours(void *ptr);
 
 size_t			zone_map(t_zone **dst, size_t size, unsigned type);
@@ -98,6 +99,7 @@ void			block_pop_free_list(t_block_free *block, unsigned type);
 void			block_push_free_list(t_block *block, unsigned type);
 void			block_update_footer(t_block *block);
 t_block			*block_fit(size_t size, unsigned type);
+t_block			*coalesce(t_block *current, int prev_free, int next_free, unsigned type);
 
 void			free(void *ptr);
 void			*malloc(size_t size);

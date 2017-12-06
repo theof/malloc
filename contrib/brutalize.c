@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 18:05:32 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/04 13:20:46 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/07 00:14:12 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int main()
 
 		if (*ptr == NULL)
 			*ptr = malloc(rand);
-		else if (arc4random_uniform(2))
-			*ptr = realloc(*ptr, rand);
+		/*else if (arc4random_uniform(2))
+			*ptr = realloc(*ptr, rand);*/
 		else
 		{
 			free(*ptr);
@@ -52,5 +52,6 @@ int main()
 		}
 		if (*ptr != NULL)
 			arc4random_buf(*ptr, rand);
+			//memset(*ptr, 0xFF, rand);
 	}
 }
