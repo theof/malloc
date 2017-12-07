@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 03:21:47 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/07 00:08:51 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/07 19:44:51 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@ extern t_allocs	g_allocs[3];
 
 size_t			block_size(size_t size)
 {
-	if (size < (BLOCK_MIN_SIZE))
+	size_t	aligned;
+
+	aligned = align_size(size + sizeof(t_block) * 2, 0x8);
+	if (aligned < (BLOCK_MIN_SIZE))
 		return (BLOCK_MIN_SIZE);
 	else
-		return (align_size(size + sizeof(t_block) * 2, 0x8));
+		return (aligned);
 }
 
 t_block			*get_next_block(t_block const *block)
@@ -33,15 +36,20 @@ t_block			*get_next_block(t_block const *block)
 		return ((t_block*)((char*)block + BLOCK_SIZE(block->size)));
 }
 
+#define DEBUG(x, y) ft_putstr(x " value: ");ft_puthex((size_t)y);ft_putendl("");
 void			block_push_free_list(t_block *block, unsigned type)
 {
 	t_block_free	*current;
 	t_block_free	**head;
-	
+
+	ft_putstr("block_push");
 	head = &(g_allocs[type].free_blocks);
 	current = (t_block_free*)block;
 	if (*head != NULL)
 	{
+		DEBUG("current", current);
+		DEBUG("(*head)", (*head));
+		DEBUG("(*head)->prev", (*head)->prev);
 		current->prev = (*head)->prev;
 		current->next = (*head);
 		(*head)->prev->next = current;
@@ -53,12 +61,15 @@ void			block_push_free_list(t_block *block, unsigned type)
 		current->prev = current;
 	}
 	*head = current;
+	ft_putstr("/block_push ");
 }
+
 
 void			block_pop_free_list(t_block_free *block, unsigned type)
 {
 	t_block_free	**head;
-	
+
+	ft_putstr("block_pop");
 	head = &(g_allocs[type].free_blocks);
 	if (block->next == block)
 	{
@@ -66,10 +77,19 @@ void			block_pop_free_list(t_block_free *block, unsigned type)
 	}
 	else
 	{
+		DEBUG("block", block);
+		DEBUG("block->prev", block->prev);
+		DEBUG("block->next", block->next);
+		DEBUG("block->prev->next", block->prev->next);
+		DEBUG("block->next->prev", block->next->prev);
+		DEBUG("*head", *head);
 		block->prev->next = block->next;
 		block->next->prev = block->prev;
 		*head = block->prev;
 	}
+	block->next = NULL;
+	block->prev = NULL;
+	ft_putstr("/block_pop ");
 }
 
 t_block			*block_fit(size_t size, unsigned type)
@@ -124,8 +144,7 @@ t_block			*block_shrink(t_block *block, size_t size, unsigned type)
 	return (block);
 }
 
-t_block			*block_enlarge(t_block *block, size_t diff, unsigned type)
-{
+t_block			*block_enlarge(t_block *block, size_t diff, unsigned type) {
 	t_block	*next;
 
 	if (block->flags.bound_right == TRUE)
@@ -148,14 +167,6 @@ t_block			*block_create(t_block_free *available, size_t size, unsigned type)
 	size_t			extra_space;
 	t_block			old;
 	
-	if (type == 0)
-	{
-		ft_putendl("block create");
-		ft_putunsigned(BLOCK_SIZE(available->header.size));
-		ft_putendl(" available size");
-		ft_putunsigned(size);
-		ft_putendl(" requested size");
-	}
 	extra_space = BLOCK_SIZE(available->header.size) - size;
 	if (allocs_assert_available_block_type(extra_space, type))
 	{
@@ -179,8 +190,6 @@ t_block			*block_create(t_block_free *available, size_t size, unsigned type)
 		block_update_footer((t_block*)available);
 		block_pop_free_list(available, type);
 	}
-	if (type == 0)
-		ft_putendl("/block create");
 	return (new);
 }
 

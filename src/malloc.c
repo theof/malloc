@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 17:54:51 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/06 23:54:32 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/07 17:07:08 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,15 @@ void	*malloc(size_t size)
 	t_block_free	*available;
 	unsigned		type;
 	size_t			zone_size;
-	static size_t	count = 0;
 
 	size = block_size(size);
 	type = allocs_get_type_block(size);
-	if (type == 0)
-	{
-		ft_putstr("malloc(");
-		ft_putnbr(size);
-		ft_putstr("): ");
-		ft_putnbr(TINY_ZONE_SIZE);
-		ft_putendl(" tiny zone");
-		count += size;
-		ft_putnbr(count);
-		ft_putendl(" count");
-	}
+	ft_putstr("\nmalloc(");
+	ft_putnbr(size);
+	ft_putstr("): ");
 	block = block_fit(size, type);
 	if (block == NULL)
 	{
-		ft_putendl(" create zone");
 		zone_size = zone_map(&zone, size, type);
 		if (zone == NULL)
 		{
@@ -52,7 +42,11 @@ void	*malloc(size_t size)
 		}
 	}
 	ft_puthex((size_t)(block + 1));
-	ft_putendl(" OK !");
-	ft_putchar(10);
+	ft_putstr(" => ");
+	if (get_next_block(block))
+	{
+		ft_puthex((size_t)(get_next_block(block) + 1));
+	}
+	ft_putendl(" OK !\n");
 	return (block + 1);
 }
