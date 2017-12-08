@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 17:54:51 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/07 17:07:08 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/08 16:58:28 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ void	*malloc(size_t size)
 			block = block_create(available, size, type);
 		}
 	}
-	ft_puthex((size_t)(block + 1));
+	ft_puthex((size_t)block);
 	ft_putstr(" => ");
 	if (get_next_block(block))
 	{
-		ft_puthex((size_t)(get_next_block(block) + 1));
+		ft_puthex((size_t)get_next_block(block));
 	}
 	ft_putendl(" OK !\n");
 	return (block + 1);

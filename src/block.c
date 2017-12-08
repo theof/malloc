@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 03:21:47 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/07 19:44:51 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/08 17:51:44 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void			block_pop_free_list(t_block_free *block, unsigned type)
 		DEBUG("*head", *head);
 		block->prev->next = block->next;
 		block->next->prev = block->prev;
-		*head = block->prev;
+		*head = block->next;
 	}
 	block->next = NULL;
 	block->prev = NULL;
@@ -106,10 +106,7 @@ t_block			*block_fit(size_t size, unsigned type)
 	while (1)
 	{
 		if (size <= BLOCK_SIZE(current->header.size))
-		{
-			*head = current;
 			return (block_create(current, size, type));
-		}
 		if (current->next == *head)
 			break;
 		current = current->next;
@@ -119,8 +116,7 @@ t_block			*block_fit(size_t size, unsigned type)
 
 /* block edit */
 
-t_block			*block_shrink(t_block *block, size_t size, unsigned type)
-{
+t_block			*block_shrink(t_block *block, size_t size, unsigned type) {
 	t_block	*next;
 	t_block	old;
 	size_t	extra_space;
@@ -128,7 +124,7 @@ t_block			*block_shrink(t_block *block, size_t size, unsigned type)
 	extra_space = BLOCK_SIZE(block->size) - size;
 	if (allocs_assert_available_block_type(extra_space, type))
 	{
-		next = (t_block*)((char*)block + size);
+		next = get_next_block(block);
 		next->size = extra_space;
 		next->flags.bound_left = FALSE;
 		next->flags.bound_right = block->flags.bound_right;
@@ -149,7 +145,7 @@ t_block			*block_enlarge(t_block *block, size_t diff, unsigned type) {
 
 	if (block->flags.bound_right == TRUE)
 		return (NULL);
-	next = (t_block*)((char*)block + BLOCK_SIZE(block->size));
+	next = get_next_block(block);
 	if (next->flags.available == TRUE && BLOCK_SIZE(next->size) <= diff)
 	{
 		block_create((t_block_free*)next, diff, type);
@@ -176,7 +172,7 @@ t_block			*block_create(t_block_free *available, size_t size, unsigned type)
 		new->size = size;
 		new->flags.bound_left = old.flags.bound_left;
 		block_update_footer(new);
-		remaining = (t_block*)((char*)available + size);
+		remaining = get_next_block(new);
 		remaining->size = extra_space;
 		remaining->flags.bound_right = old.flags.bound_right;
 		remaining->flags.available = TRUE;
@@ -186,8 +182,8 @@ t_block			*block_create(t_block_free *available, size_t size, unsigned type)
 	else
 	{
 		new = (t_block*)available;
-		available->header.flags.available = FALSE;
-		block_update_footer((t_block*)available);
+		new->flags.available = FALSE;
+		block_update_footer(new);
 		block_pop_free_list(available, type);
 	}
 	return (new);
@@ -211,7 +207,7 @@ void			block_update_footer(t_block *block)
 {
 	t_block	*footer;
 	
-	footer = (t_block*)((char*)block + BLOCK_SIZE(block->size) - sizeof(t_block));
+	footer = get_next_block(block) - 1;
 	footer->size = block->size;
 }
 
@@ -222,6 +218,7 @@ t_block			*coalesce_right(t_block *current, unsigned type)
 	t_block_free	*next;
 	t_block			old;
 
+	ft_putendl("coalesced right");
 	next = (t_block_free*)get_next_block(current);
 	block_pop_free_list(next, type);
 	old = *current;
@@ -238,7 +235,8 @@ t_block			*coalesce_left(t_block *current, unsigned type)
 {
 	t_block	*prev;
 	size_t	prev_size;
-	
+
+	ft_putendl("coalesce_left");
 	current->flags.available = TRUE;
 	block_update_footer(current);
 	block_push_free_list(current, type);
