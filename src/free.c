@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/08 17:28:33 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/11 19:46:39 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,13 @@ void	hexdump(t_block* current)
 }
 
 
+size_t	get_list_size(t_block_free* head);
+
 void	free(void *ptr)
 {
-	int			prev_free;
-	int			next_free;
-	t_block		*current;
-	unsigned	type;
+	t_block			*current;
+	t_block_free	*freed;
+	unsigned		type;
 	
 	ft_putstr("free(");
 	ft_puthex((size_t)ptr - sizeof(t_block));
@@ -84,27 +85,11 @@ void	free(void *ptr)
 	}
 	current = (t_block*)ptr - 1;
 	type = allocs_get_type_block(BLOCK_SIZE(current->size));
-	if (current->flags.bound_left)
-		prev_free = FALSE;
-	else
-		prev_free = (current - 1)->flags.available;
-	if (current->flags.bound_right)
-		next_free = FALSE;
-	else
-		next_free = get_next_block(current)->flags.available;
-	current = coalesce(current, prev_free, next_free, type);
-	if (current->flags.bound_left && current->flags.bound_right)
+	freed = coalesce(current, type);
+	if (freed->header.flags.bound_left && freed->header.flags.bound_right)
 	{
-		block_pop_free_list((t_block_free*)current, type);
-		zone_unmap((t_zone*)current - 1);
-	}
-	else
-	{
-		if (type == 0)
-		{
-			ft_putchar(10);
-			hexdump(current);
-		}
+		block_pop_free_list(freed, type);
+		zone_unmap((t_zone*)freed - 1);
 	}
 	ft_putendl(" OK !");
 	return ;
