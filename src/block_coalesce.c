@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 15:40:05 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 15:40:50 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/13 18:30:35 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,13 @@ t_block_free	*coalesce_left_right(t_block *current, t_block_free *prev, t_block_
 	return (prev);
 }
 
+t_block_free	*coalesce_none(t_block *current, unsigned type)
+{
+	current->flags.available = TRUE;
+	block_update_footer(current);
+	return (block_push_free_list(current, type));
+}
+
 t_block_free	*coalesce(t_block *current, unsigned type)
 {
 	t_block	*prev;
@@ -51,19 +58,17 @@ t_block_free	*coalesce(t_block *current, unsigned type)
 	if (prev != NULL && prev->flags.available == TRUE)
 	{
 		if (next != NULL && next->flags.available == TRUE)
-			return (coalesce_left_right(current, (t_block_free*)prev, (t_block_free*)next, type));
+			return (coalesce_none(current, type));
+			//return (coalesce_left_right(current, (t_block_free*)prev, (t_block_free*)next, type));
 		else
 			return (coalesce_left(current, (t_block_free*)prev));
 	}
 	else
 	{
 		if (next != NULL && next->flags.available == TRUE)
-			return (coalesce_right(current, (t_block_free*)next, type));
+			return (coalesce_none(current, type));
+			//return (coalesce_right(current, (t_block_free*)next, type));
 		else
-		{
-			current->flags.available = TRUE;
-			block_update_footer(current);
-			return (block_push_free_list(current, type));
-		}
+			return (coalesce_none(current, type));
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 03:21:47 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 18:09:51 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/13 18:21:22 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "libft.h"
 
 extern t_allocs	g_allocs[3];
-
-/* block misc */
 
 size_t			block_size(size_t size)
 {
@@ -46,6 +44,7 @@ size_t	get_list_size(t_block_free* head)
 	}
 	return (count);
 }
+
 t_block			*block_fit(size_t size, unsigned type)
 {
 	t_block_free	**head;
@@ -73,8 +72,6 @@ t_block			*block_fit(size_t size, unsigned type)
 	}
 	return (NULL);
 }
-
-/* block edit */
 
 t_block			*block_create(t_block_free *available, size_t size, unsigned type)
 {
