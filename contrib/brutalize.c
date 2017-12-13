@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 18:05:32 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/11 16:01:09 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/13 18:03:19 by tvallee          ###   ########.fr       */
 /* ************************************************************************** */
 
 #include <stdlib.h>
@@ -64,19 +64,19 @@ void	hexdump(t_block* current)
 	ft_putchar('\n');
 }
 
-
 int main()
 {
 	void		*table[200] = {NULL};
 	void		**ptr;
 	uint32_t	rand;
 	unsigned	type;
+	char		type_map[3][6] = {"TINY", "SMALL", "LARGE"};
 	unsigned char	pattern[4] = {0xDE, 0xAD, 0xBE, 0xEF};
 
 	write(1, "=========BEGIN BRUTALIZE=========\n", sizeof("=========BEGIN BRUTALIZE========="));
 	while (1)
 	{
-		ft_putendl("=> new iteration");
+		ft_putstr("\n=> new iteration: ");
 		type = 0;//arc4random_uniform(3);
 		if (type == 0)
 		{
@@ -99,19 +99,28 @@ int main()
 
 		if (*ptr == NULL)
 		{
+			ft_putstr(type_map[type]);
+			ft_putstr(" malloc size ");
+			ft_putnbr(rand);
+			ft_putchar(10);
 			*ptr = malloc(rand);
+			if (*ptr == NULL)
+			{
+				ft_putendl("malloc returned NULL !");
+				return (1);
+			}
 		}
 		/*else if (arc4random_uniform(2))
 			*ptr = realloc(*ptr, rand);*/
 		else
 		{
+			ft_putendl("free");
 			free(*ptr);
 			*ptr = NULL;
 		}
 		if (*ptr != NULL)
 		{
 			memset_pattern4(*ptr, pattern, rand);//arc4random_buf(*ptr, rand);
-			hexdump((t_block*)(*ptr) - 1);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 22:07:52 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/07 20:07:18 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/13 16:28:55 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,13 @@ size_t		zone_map(t_zone **dst, size_t size, unsigned type)
 	else
 		zone_size = TINY_ZONE_SIZE;
 	new = mmap(0, zone_size, PROT_READ_WRITE, MAP_ANON_PRIVATE, -1, 0);
-	if (new != NULL)
+	if (new != MAP_FAILED)
+	{
 		zone_push(new, type);
-	*dst = new;
+		*dst = new;
+	}
+	else
+		*dst = NULL;
 	return (zone_size);
 }
 

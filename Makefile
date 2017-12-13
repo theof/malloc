@@ -24,6 +24,9 @@ SOURCES    += free.c
 SOURCES    += show_alloc_mem.c
 SOURCES    += zone.c
 SOURCES    += block.c
+SOURCES    += block_list.c
+SOURCES    += block_coalesce.c
+SOURCES    += block_resize.c
 SOURCES    += allocs.c
 SOURCES    += tools.c
 
@@ -67,6 +70,9 @@ $(DEP_PATH)/%.d: %.c | $(DEP_PATH)
 
 $(BUILD_DIR):
 	@-mkdir -p $@
+
+brutalize: $(NAME)
+	gcc -o brutalize contrib/brutalize.c -L./libft -lft -I./libft/include
 
 check: $(NAME)
 	@./run_tests.sh

@@ -6,7 +6,7 @@
 /*   By: tvallee <tvallee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/05 16:42:41 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/11 17:20:42 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/13 15:43:22 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,16 +90,19 @@ int				allocs_is_ours(void *ptr);
 size_t			zone_map(t_zone **dst, size_t size, unsigned type);
 void			zone_unmap(t_zone *zone);
 
+t_block_free	*block_push_free_list(t_block *block, unsigned type);
+t_block_free	*block_replace_free_list(t_block_free *old, t_block *new, unsigned type);
+t_block			*block_pop_free_list(t_block_free *block, unsigned type);
 t_block			*get_next_block(t_block const *block);
-size_t			block_size(size_t size);
+t_block			*get_prev_block(t_block const *block);
 
+t_block_free	*coalesce(t_block *current, unsigned type);
+
+size_t			block_size(size_t size);
 t_block_free	*block_init_zone(t_zone *zone, size_t zone_size, unsigned type);
 t_block			*block_create(t_block_free *available, size_t size, unsigned type);
-t_block			*block_pop_free_list(t_block_free *block, unsigned type);
-t_block_free	*block_push_free_list(t_block *block, unsigned type);
 void			block_update_footer(t_block *block);
 t_block			*block_fit(size_t size, unsigned type);
-t_block_free	*coalesce(t_block *current, unsigned type);
 
 void			free(void *ptr);
 void			*malloc(size_t size);

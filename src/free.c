@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/11 19:46:39 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/13 18:07:01 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,6 @@ void	hexdump(t_block* current)
 	ft_putchar('\n');
 }
 
-
-size_t	get_list_size(t_block_free* head);
-
 void	free(void *ptr)
 {
 	t_block			*current;
@@ -77,10 +74,10 @@ void	free(void *ptr)
 	
 	ft_putstr("free(");
 	ft_puthex((size_t)ptr - sizeof(t_block));
-	ft_putstr("): ");
+	ft_putendl("):");
 	if (ptr == NULL || allocs_is_ours(ptr) == FALSE)
 	{
-		ft_putendl("not ours");
+		ft_putendl("unregistered memory !");
 		return ;
 	}
 	current = (t_block*)ptr - 1;
@@ -91,6 +88,6 @@ void	free(void *ptr)
 		block_pop_free_list(freed, type);
 		zone_unmap((t_zone*)freed - 1);
 	}
-	ft_putendl(" OK !");
+	ft_putendl("OK!");
 	return ;
 }
