@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 15:41:18 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/15 19:23:50 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 21:58:38 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,13 @@ t_block			*block_shrink(t_block *block, size_t size, unsigned type)
 	extra_space = BLOCK_SIZE(block->size) - size;
 	if (allocs_assert_available_block_type(extra_space, type))
 	{
-		next = get_next_block(block);
-		next->size = extra_space;
-		next->flags.bound_left = FALSE;
-		next->flags.bound_right = block->flags.bound_right;
-		next->flags.available = FALSE;
-		block_update_footer(next);
 		old = *block;
 		block->size = size;
 		block->flags.bound_left = old.flags.bound_left;
-		block->flags.available = FALSE;
+		block_update_footer(block);
+		next = get_next_block(block);
+		next->size = extra_space;
+		next->flags.bound_right = old.flags.bound_right;
 		block_update_footer(next);
 		free(next);
 	}
