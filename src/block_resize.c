@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 15:41:18 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 15:41:56 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 19:23:50 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,8 @@ t_block			*block_enlarge(t_block *block, size_t diff, unsigned type)
 {
 	t_block	*next;
 
-	if (block->flags.bound_right == TRUE)
+	if ((next = get_next_block(block)) == NULL)
 		return (NULL);
-	next = get_next_block(block);
 	if (next->flags.available == TRUE && BLOCK_SIZE(next->size) <= diff)
 	{
 		block_create((t_block_free*)next, diff, type);

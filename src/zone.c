@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 22:07:52 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 16:28:55 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 20:29:14 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,11 @@ size_t		zone_map(t_zone **dst, size_t size, unsigned type)
 	return (zone_size);
 }
 
-void		zone_unmap(t_zone *zone)
+void		zone_unmap(t_zone *zone, unsigned type)
 {
 	size_t		zone_size;
-	unsigned	type;
 
 	zone_size = sizeof(t_zone) + BLOCK_SIZE(((t_block*)(zone + 1))->size);
-	type = allocs_get_type_zone(zone_size);
 	zone_pop(zone, type);
 	munmap(zone, zone_size);
 }

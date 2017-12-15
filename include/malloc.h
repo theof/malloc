@@ -6,7 +6,7 @@
 /*   By: tvallee <tvallee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/05 16:42:41 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/15 18:38:56 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 20:29:03 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int				allocs_assert_available_block_type(size_t size, unsigned type);
 unsigned		allocs_is_ours(void *ptr);
 
 size_t			zone_map(t_zone **dst, size_t size, unsigned type);
-void			zone_unmap(t_zone *zone);
+void			zone_unmap(t_zone *zone, unsigned type);
 
 t_block_free	*block_push_free_list(t_block *block, unsigned type);
 t_block_free	*block_replace_free_list(t_block_free *old, t_block *new, unsigned type);

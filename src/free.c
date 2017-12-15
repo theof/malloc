@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/15 18:45:58 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 20:28:42 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	free(void *ptr)
 	if (freed->header.flags.bound_left && freed->header.flags.bound_right)
 	{
 		block_pop_free_list(freed, type);
-		zone_unmap((t_zone*)freed - 1);
+		zone_unmap((t_zone*)freed - 1, type);
 	}
 	ft_putendl("OK!");
 	return ;
