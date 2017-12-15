@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 18:05:32 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 18:03:19 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 14:38:51 by tvallee          ###   ########.fr       */
 /* ************************************************************************** */
 
 #include <stdlib.h>
@@ -64,6 +64,11 @@ void	hexdump(t_block* current)
 	ft_putchar('\n');
 }
 
+void	print_header(void)
+{
+	write(1, "=========BEGIN BRUTALIZE=========\n", sizeof("=========BEGIN BRUTALIZE========="));
+}
+
 int main()
 {
 	void		*table[200] = {NULL};
@@ -73,7 +78,7 @@ int main()
 	char		type_map[3][6] = {"TINY", "SMALL", "LARGE"};
 	unsigned char	pattern[4] = {0xDE, 0xAD, 0xBE, 0xEF};
 
-	write(1, "=========BEGIN BRUTALIZE=========\n", sizeof("=========BEGIN BRUTALIZE========="));
+	print_header();
 	while (1)
 	{
 		ft_putstr("\n=> new iteration: ");

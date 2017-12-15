@@ -1,0 +1,75 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   use_malloc.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/12/15 14:54:48 by tvallee           #+#    #+#             */
+/*   Updated: 2017/12/15 15:30:42 by tvallee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stdlib.h>
+#include <assert.h>
+
+enum E_OP {
+	E_MALLOC = 0,
+	E_FREE,
+	E_REALLOC
+}
+
+
+typedef struct	s_op_malloc {
+	unsigned	op;
+	size_t		size;
+	size_t		malloc_return_index;
+}
+
+typedef struct	s_op_free {
+	unsigned	op;
+	size_t		malloc_return_index;
+}				t_op_free;
+
+typedef struct	s_op_realloc {
+	unsigned	op;
+	size_t		malloc_return_index;
+	size_t		size;
+}
+
+typedef union	u_op {
+	unsigned		op;
+	t_op_free		op_free;
+	t_op_malloc		op_malloc;
+	t_op_realloc	op_realloc;
+}				t_op;
+
+int main(int ac, char **av)
+{
+	/* Insert void *returns[] here */
+	{returns}
+	/* Insert t_op instructions[] here*/
+	{instructions}
+
+	for (size_t index = 0; index < sizeof(instructions) / *instructions; index++)
+	{
+		switch (instructions[index].op) {
+			case E_MALLOC:
+				assert(returns[instructions[index].op_malloc.malloc_return_index] = malloc(instructions[index].op_malloc.size));
+				memset(returns[instructions[index].op_malloc.malloc_return_index], 0xFF, instructions[index].op_malloc.size);
+				break;
+			case E_FREE:
+				free(returns[instructions[index].op_free.malloc_return_index]);
+				break;
+			case E_REALLOC:
+				assert (
+					returns[instructions[index].op_realloc.malloc_return_index] = realloc(
+						returns[instructions[index].op_realloc.malloc_return_index],
+						instructions[index].op_realloc.size
+					)
+				);
+				memset(returns[instructions[index].op_realloc.malloc_return_index], 0xFF, instructions[index].op_realloc.size);
+				break;
+		}
+	}
+}
