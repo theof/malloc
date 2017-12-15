@@ -6,7 +6,7 @@
 /*   By: tvallee <tvallee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/05 16:42:41 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 15:43:22 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 18:38:56 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ unsigned		allocs_get_type(size_t request_size);
 unsigned		allocs_get_type_zone(size_t zone_size);
 unsigned		allocs_get_type_block(size_t block_size);
 int				allocs_assert_available_block_type(size_t size, unsigned type);
-int				allocs_is_ours(void *ptr);
+unsigned		allocs_is_ours(void *ptr);
 
 size_t			zone_map(t_zone **dst, size_t size, unsigned type);
 void			zone_unmap(t_zone *zone);
@@ -97,6 +97,9 @@ t_block			*get_next_block(t_block const *block);
 t_block			*get_prev_block(t_block const *block);
 
 t_block_free	*coalesce(t_block *current, unsigned type);
+
+t_block			*block_shrink(t_block *block, size_t size, unsigned type);
+t_block			*block_enlarge(t_block *block, size_t diff, unsigned type);
 
 size_t			block_size(size_t size);
 t_block_free	*block_init_zone(t_zone *zone, size_t zone_size, unsigned type);

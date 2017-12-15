@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 08:14:23 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/06 19:58:19 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 18:44:21 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int			allocs_assert_available_block_type(size_t available, unsigned type)
 	return (TRUE);
 }
 
-int		allocs_is_ours(void *ptr)
+unsigned	allocs_is_ours(void *ptr)
 {
 	t_block		*block;
 	unsigned	type;
@@ -88,7 +88,7 @@ int		allocs_is_ours(void *ptr)
 				while (current_block != NULL)
 				{
 					if (current_block == block)
-						return (TRUE);
+						return (type);
 					current_block = get_next_block(current_block);
 				}
 				current_zone = current_zone->next;
@@ -98,5 +98,5 @@ int		allocs_is_ours(void *ptr)
 		}
 		type++;
 	}
-	return (FALSE);
+	return (E_ALLOC_NONE);
 }

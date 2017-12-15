@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 15:40:05 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 18:30:35 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 18:47:02 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,14 @@ t_block_free	*coalesce(t_block *current, unsigned type)
 	if (prev != NULL && prev->flags.available == TRUE)
 	{
 		if (next != NULL && next->flags.available == TRUE)
-			return (coalesce_none(current, type));
-			//return (coalesce_left_right(current, (t_block_free*)prev, (t_block_free*)next, type));
+			return (coalesce_left_right(current, (t_block_free*)prev, (t_block_free*)next, type));
 		else
 			return (coalesce_left(current, (t_block_free*)prev));
 	}
 	else
 	{
 		if (next != NULL && next->flags.available == TRUE)
-			return (coalesce_none(current, type));
-			//return (coalesce_right(current, (t_block_free*)next, type));
+			return (coalesce_right(current, (t_block_free*)next, type));
 		else
 			return (coalesce_none(current, type));
 	}

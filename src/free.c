@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 18:07:01 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 18:45:58 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,12 @@ void	free(void *ptr)
 	ft_putstr("free(");
 	ft_puthex((size_t)ptr - sizeof(t_block));
 	ft_putendl("):");
-	if (ptr == NULL || allocs_is_ours(ptr) == FALSE)
+	if (ptr == NULL || (type = allocs_is_ours(ptr)) == E_ALLOC_NONE)
 	{
 		ft_putendl("unregistered memory !");
 		return ;
 	}
 	current = (t_block*)ptr - 1;
-	type = allocs_get_type_block(BLOCK_SIZE(current->size));
 	freed = coalesce(current, type);
 	if (freed->header.flags.bound_left && freed->header.flags.bound_right)
 	{
