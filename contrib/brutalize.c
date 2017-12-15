@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/30 18:05:32 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 18:03:19 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/15 18:48:42 by tvallee          ###   ########.fr       */
 /* ************************************************************************** */
 
 #include <stdlib.h>
@@ -77,7 +77,7 @@ int main()
 	while (1)
 	{
 		ft_putstr("\n=> new iteration: ");
-		type = 0;//arc4random_uniform(3);
+		type = arc4random_uniform(3);
 		if (type == 0)
 		{
 			rand = arc4random_uniform(TINY_SIZE + 1);
@@ -120,7 +120,7 @@ int main()
 		}
 		if (*ptr != NULL)
 		{
-			memset_pattern4(*ptr, pattern, rand);//arc4random_buf(*ptr, rand);
+			arc4random_buf(*ptr, rand);
 		}
 	}
 }
