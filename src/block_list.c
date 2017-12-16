@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 15:38:12 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 18:08:57 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/16 16:01:06 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,15 @@
 
 extern t_allocs	g_allocs[3];
 
-#define DEBUG(x, y) ft_putstr(x " value: ");ft_puthex((size_t)y);ft_putendl("");
 t_block_free	*block_push_free_list(t_block *block, unsigned type)
 {
 	t_block_free	*current;
 	t_block_free	**head;
 
-	ft_putstr("push");
 	head = &(g_allocs[type].free_blocks);
 	current = (t_block_free*)block;
 	if (*head != NULL)
 	{
-		DEBUG("current", current);
-		DEBUG("current->size", current->header.size);
-		DEBUG("*head", *head);
-		DEBUG("*head->prev", (*head)->prev);
-		DEBUG("*head->prev->next", (*head)->prev->next);
 		current->prev = (*head)->prev;
 		current->next = (*head);
 		(*head)->prev->next = current;
@@ -42,7 +35,6 @@ t_block_free	*block_push_free_list(t_block *block, unsigned type)
 		current->prev = current;
 	}
 	*head = current;
-	ft_putstr(" ok");
 	return ((t_block_free*)current);
 }
 

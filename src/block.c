@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 03:21:47 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/13 18:21:22 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/16 16:00:37 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,13 @@ t_block			*block_fit(size_t size, unsigned type)
 	if (*head == NULL)
 		return (NULL);
 	current = *head;
-	ft_putstr("block_fit");
 	while (1)
 	{
 		if (size <= BLOCK_SIZE(current->header.size))
-		{
-			ft_putstr("/block_fit");
 			return (block_create(current, size, type));
-		}
 		if (current->next == *head)
 			break;
 		current = current->next;
-		ft_puthex((size_t)(current));
-		ft_putendl(" current");
 	}
 	return (NULL);
 }
@@ -108,12 +102,8 @@ t_block_free	*block_init_zone(t_zone *zone, size_t zone_size, unsigned type)
 {
 	t_block	*request;
 
-	ft_putstr("\t\tiniting block zone at ");
 	request = (t_block*)(zone + 1);
-	ft_puthex((size_t)request);
 	request->size = zone_size - sizeof(t_zone);
-	ft_putstr(" size: ");
-	ft_putnbr(request->size);
 	request->flags.bound_right = TRUE;
 	request->flags.bound_left = TRUE;
 	request->flags.available = TRUE;

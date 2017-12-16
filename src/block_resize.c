@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 15:41:18 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/15 21:58:38 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/16 15:52:44 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_block			*block_shrink(t_block *block, size_t size, unsigned type)
 		next->size = extra_space;
 		next->flags.bound_right = old.flags.bound_right;
 		block_update_footer(next);
-		free(next);
+		free(next + 1);
 	}
 	return (block);
 }
