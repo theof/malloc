@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:13:30 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 13:09:31 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/16 16:05:58 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ size_t	print_block(t_block *block)
 		ft_putstr(" - ");
 		ft_puthex((size_t)((char*)(block + 1) + size));
 		ft_putstr(" : ");
-		ft_putnbr(size); /* FIXME overflows int */
+		ft_putunsigned(size);
 		ft_putstr(" bytes\n");
 	}
 	if (!block->flags.bound_right)
@@ -155,7 +155,7 @@ void	show_alloc_mem(void)
 		i++;
 	}
 	ft_putstr("Total : ");
-	ft_putnbr(total); // Fixme overflows int
+	ft_putunsigned(total);
 	ft_putstr(" bytes\n");
 	munmap(array, size);
 }

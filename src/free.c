@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/11/30 16:23:00 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/16 16:01:49 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,87 +15,20 @@
 
 extern t_allocs g_allocs[3];
 
-static t_block	*coalesce_right(t_block *current, unsigned type)
-{
-	t_block_free	*next;
-	t_block			old;
-
-	next = (t_block_free*)get_next_block(current);
-	block_pop_free_list(next, type);
-	old = *current;
-	current->size = BLOCK_SIZE(old.size) + BLOCK_SIZE(next->header.size);
-	current->flags.available = TRUE;
-	current->flags.bound_left = old.flags.bound_left;
-	current->flags.bound_right = next->header.flags.bound_right;
-	block_copy_footer(current);
-	block_push_free_list(current, type);
-	return (current);
-}
-
-static t_block	*coalesce_left(t_block *current, unsigned type)
-{
-	t_block	*prev;
-	size_t	prev_size;
-	
-	current->flags.available = TRUE;
-	block_copy_footer(current);
-	block_push_free_list(current, type);
-	prev_size = BLOCK_SIZE((current - 1)->size);
-	prev = (t_block*)((char*)current - prev_size);
-	return (coalesce_right(prev, type));
-}
-
-static t_block	*coalesce(t_block *current, int prev_free,
-		int next_free, unsigned type)
-{
-	if (prev_free == TRUE)
-	{
-		if (next_free == TRUE)
-			return (coalesce_left(coalesce_right(current, type), type));
-		else
-			return (coalesce_left(current, type));
-	}
-	else
-	{
-		if (next_free == TRUE)
-			return (coalesce_right(current, type));
-		else
-		{
-			current->flags.available = TRUE;
-			block_copy_footer(current);
-			block_push_free_list(current, type);
-			return (current);
-		}
-	}
-}
-
 void	free(void *ptr)
 {
-	int			prev_free;
-	int			next_free;
-	t_block		*current;
-	unsigned	type;
+	t_block			*current;
+	t_block_free	*freed;
+	unsigned		type;
 	
-	if (ptr == NULL || allocs_is_ours(ptr) == FALSE)
+	if (ptr == NULL || (type = allocs_is_ours(ptr)) == E_ALLOC_NONE)
 		return ;
-	ft_putstr("free: ");
-	ft_puthex((size_t)ptr);
-	current = (t_block*)((char*)ptr - sizeof(t_block));
-	type = allocs_get_type(BLOCK_SIZE(current->size) - 2 * sizeof(t_block));
-	if (current->flags.bound_left)
-		prev_free = FALSE;
-	else
-		prev_free = (current - 1)->flags.bound_left;
-	if (current->flags.bound_right)
-		next_free = FALSE;
-	else
-		next_free = get_next_block(current)->flags.bound_right;
-	current = coalesce(current, prev_free, next_free, type);
-	ft_putendl("pute");
-	if (current->flags.bound_left && current->flags.bound_right)
+	current = (t_block*)ptr - 1;
+	freed = coalesce(current, type);
+	if (freed->header.flags.bound_left && freed->header.flags.bound_right)
 	{
-		zone_unmap((t_zone*)((char*)current - sizeof(t_zone)));
+		block_pop_free_list(freed, type);
+		zone_unmap((t_zone*)freed - 1, type);
 	}
-	ft_putendl("ok !");
 	return ;
 }
