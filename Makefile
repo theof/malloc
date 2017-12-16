@@ -71,7 +71,7 @@ $(DEP_PATH)/%.d: %.c | $(DEP_PATH)
 $(BUILD_DIR):
 	@-mkdir -p $@
 
-brutalize: $(NAME)
+brutalize: $(NAME) contrib/brutalize.c
 	gcc -o brutalize contrib/brutalize.c -L./libft -lft -I./libft/include
 
 check: $(NAME)
