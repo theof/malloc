@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 15:41:18 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/16 19:05:52 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/18 12:50:32 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,15 @@ t_block			*block_shrink(t_block *block, size_t size, unsigned type)
 
 t_block			*block_enlarge(t_block *block, size_t diff, unsigned type)
 {
-	t_block	*next;
+	t_block_free	*next;
+	t_block			*reserved;
 
-	if ((next = get_next_block(block)) == NULL)
+	if ((next = (t_block_free*)get_next_block(block)) == NULL)
 		return (NULL);
-	if (next->flags.available == FALSE || BLOCK_SIZE(next->size) <= diff)
+	if (next->header.flags.available == FALSE || BLOCK_SIZE(next->header.size) <= diff)
 		return (NULL);
-	block_create((t_block_free*)next, diff, type);
-	block->size += diff;
+	reserved = block_create(next, diff, type);
+	block->size += reserved->size;
 	block_update_footer(block);
 	return (block);
 }
