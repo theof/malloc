@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 08:14:23 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/18 11:26:38 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/18 14:22:26 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,6 @@ t_allocs	g_allocs[3] = {
 		.free_blocks = NULL,
 	},
 };
-
-unsigned	allocs_get_type(size_t request_size)
-{
-	if (request_size > SMALL_SIZE)
-		return (E_ALLOC_LARGE);
-	else if (request_size > TINY_SIZE)
-		return (E_ALLOC_SMALL);
-	else
-		return (E_ALLOC_TINY);
-}
-
-unsigned	allocs_get_type_zone(size_t zone_size)
-{
-	if (zone_size == TINY_ZONE_SIZE)
-		return (E_ALLOC_TINY);
-	else if (zone_size == SMALL_ZONE_SIZE)
-		return (E_ALLOC_SMALL);
-	else
-		return (E_ALLOC_LARGE);
-}
 
 unsigned	allocs_get_type_block(size_t block_size)
 {
@@ -74,7 +54,7 @@ unsigned	allocs_is_ours(void *ptr)
 	t_zone		*head;
 	t_zone		*current_zone;
 	t_block		*current_block;
-	
+
 	block = (t_block*)ptr - 1;
 	type = 0;
 	while (type < E_ALLOC_NONE)

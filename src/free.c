@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:14:09 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/18 12:25:44 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/18 14:23:58 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	free(void *ptr)
 	t_block			*current;
 	t_block_free	*freed;
 	unsigned		type;
-	
+
 	if (ptr == NULL || (type = allocs_is_ours(ptr)) == E_ALLOC_NONE)
 		return ;
 	current = (t_block*)ptr - 1;

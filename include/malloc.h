@@ -6,7 +6,7 @@
 /*   By: tvallee <tvallee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/05 16:42:41 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/15 20:29:03 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/18 14:19:26 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ enum	e_allocs_sizes
 };
 
 size_t			align_size(size_t size, size_t alignment);
-unsigned		allocs_get_type(size_t request_size);
-unsigned		allocs_get_type_zone(size_t zone_size);
 unsigned		allocs_get_type_block(size_t block_size);
 int				allocs_assert_available_block_type(size_t size, unsigned type);
 unsigned		allocs_is_ours(void *ptr);

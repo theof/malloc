@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 03:21:47 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/16 16:00:37 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/18 17:03:55 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,6 @@ size_t			block_size(size_t size)
 		return (aligned);
 }
 
-size_t	get_list_size(t_block_free* head)
-{
-	t_block_free	*current;
-	size_t			count;
-
-	current = head;
-	count = 0;
-	if (current == NULL)
-		return (count);
-	while (1)
-	{
-		count++;
-		current = current->next;
-		if (current == head)
-			break;
-	}
-	return (count);
-}
-
 t_block			*block_fit(size_t size, unsigned type)
 {
 	t_block_free	**head;
@@ -61,19 +42,20 @@ t_block			*block_fit(size_t size, unsigned type)
 		if (size <= BLOCK_SIZE(current->header.size))
 			return (block_create(current, size, type));
 		if (current->next == *head)
-			break;
+			break ;
 		current = current->next;
 	}
 	return (NULL);
 }
 
-t_block			*block_create(t_block_free *available, size_t size, unsigned type)
+t_block			*block_create(t_block_free *available, size_t size,
+		unsigned type)
 {
 	t_block			*new;
 	t_block			*remaining;
 	size_t			extra_space;
 	t_block			old;
-	
+
 	new = block_pop_free_list(available, type);
 	extra_space = BLOCK_SIZE(new->size) - size;
 	if (allocs_assert_available_block_type(extra_space, type))

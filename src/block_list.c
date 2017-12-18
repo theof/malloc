@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/13 15:38:12 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/16 16:01:06 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/18 14:24:22 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ t_block_free	*block_push_free_list(t_block *block, unsigned type)
 	return ((t_block_free*)current);
 }
 
-t_block_free	*block_replace_free_list(t_block_free *old, t_block *new, unsigned type)
+t_block_free	*block_replace_free_list(t_block_free *old, t_block *new,
+		unsigned type)
 {
 	t_block_free	*replacement;
 

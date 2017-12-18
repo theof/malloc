@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 18:03:45 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/18 12:50:44 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/18 14:30:49 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,23 @@
 #include <unistd.h>
 #include "libft.h"
 
+static void		*try_resize(t_block *block, size_t new_size, unsigned type)
+{
+	size_t	diff;
+	t_block	*resized;
+
+	if (new_size < BLOCK_SIZE(block->size))
+		return (block_shrink(block, new_size, type));
+	if ((diff = new_size - BLOCK_SIZE(block->size)) == 0)
+		return (block);
+	resized = block_enlarge(block, diff, type);
+	if (resized != NULL)
+		return (block);
+	return (NULL);
+}
+
 void			*realloc(void *ptr, size_t size)
 {
-	size_t		diff;
 	t_block		*block;
 	t_block		*resized;
 	void		*new;
@@ -31,16 +45,10 @@ void			*realloc(void *ptr, size_t size)
 	size_block = block_size(size);
 	if (type == allocs_get_type_block(size_block))
 	{
-		if (size_block < BLOCK_SIZE(block->size))
-			return (block_shrink(block, size_block, type) + 1);
-		if ((diff = size_block - BLOCK_SIZE(block->size)) == 0)
-			return (ptr);
-		resized = block_enlarge(block, diff, type);
-		if (resized != NULL)
-			return (ptr);
+		if ((resized = try_resize(block, size_block, type)) != NULL)
+			return (resized + 1);
 	}
-	new = malloc(size);
-	if (new)
+	if ((new = malloc(size)) != NULL)
 	{
 		if (size > BLOCK_SIZE(block->size) - 2 * sizeof(t_block))
 			ft_memcpy(new, ptr, BLOCK_SIZE(block->size) - 2 * sizeof(t_block));

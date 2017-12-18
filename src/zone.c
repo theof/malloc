@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 22:07:52 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/15 20:29:14 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/18 17:07:53 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	zone_push(t_zone *new, unsigned type)
 static void	zone_pop(t_zone *zone, unsigned type)
 {
 	t_zone	**head;
-	
+
 	head = &(g_allocs[type].zones);
 	if (zone->next == zone)
 		*head = NULL;

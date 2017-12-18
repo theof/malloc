@@ -6,7 +6,7 @@
 /*   By: tvallee <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 19:13:30 by tvallee           #+#    #+#             */
-/*   Updated: 2017/12/16 16:05:58 by tvallee          ###   ########.fr       */
+/*   Updated: 2017/12/18 17:06:56 by tvallee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ size_t	get_n_zones(void)
 				count++;
 				link = link->next;
 				if (link == head)
-					break;
+					break ;
 			}
 		}
 		type++;
@@ -63,7 +63,7 @@ void	array_fill(t_alloc_zone *array)
 				array++;
 				link = link->next;
 				if (link == head)
-					break;
+					break ;
 			}
 		}
 		type++;
@@ -121,7 +121,7 @@ size_t	print_block(t_block *block)
 
 void	print_zone_header(t_alloc_zone alloc)
 {
-	char	*strings[] = {
+	const char	*strings[] = {
 		"TINY",
 		"SMALL",
 		"LARGE"
