@@ -32,10 +32,9 @@ typedef struct	s_flag
 	bool	quiet;
 	bool	calloc;
 	size_t	limit;
-	bool	pthread;
-	int		nbPthread;
 	bool	checkError;
 	int		align;
+	int		nthread;
 }				t_flag;
 
 typedef struct	s_data
@@ -45,13 +44,12 @@ typedef struct	s_data
 }				t_data;
 
 t_flag		g_flag = {
-	false,
-	false,
-	0,
-	false,
-	2,
-	false,
-	0
+	.quiet = false,
+	.calloc = false,
+	.limit = 0,
+	.nthread = 1,
+	.checkError = false,
+	.align = 0
 };
 
 static void		ft_putchar(char c)
@@ -225,17 +223,17 @@ void *brut(void *argv)
 }
 
 
-void		check_pthread()
+void		spawn_threads(void)
 {
-	pthread_t	thread_id[g_flag.nbPthread];
+	pthread_t	thread_id[g_flag.nthread];
 	size_t		count;
 
 	count = 0;
 	while (!g_flag.limit || count++ < g_flag.limit)
 	{
-		for(int i = 0; i < g_flag.nbPthread; i++)
+		for(int i = 0; i < g_flag.nthread; i++)
 			pthread_create(&thread_id[i], NULL, brut, NULL);
-		for(int i = 0; i < g_flag.nbPthread; i++)
+		for(int i = 0; i < g_flag.nthread; i++)
 		{
 				pthread_join(thread_id[i], NULL);
 				ft_putnbr(i);
@@ -266,7 +264,7 @@ int main(int ac, char **av)
 {
 	int			opt;
 
-	while ((opt = getopt(ac, av, "a:ql:cpn:e")) != -1) {
+	while ((opt = getopt(ac, av, "a:ql:cj:e")) != -1) {
 		switch (opt) {
 		case 'q':
 			g_flag.quiet = true;
@@ -277,11 +275,8 @@ int main(int ac, char **av)
 		case 'c':
 			g_flag.calloc = true;
 			break;
-		case 'p':
-			g_flag.pthread = true;
-			break;
-		case 'n':
-			g_flag.nbPthread = atoi(optarg);
+		case 'j':
+			g_flag.nthread = atoi(optarg);
 			break;
 		case 'a':
 			g_flag.align = atoi(optarg);
@@ -291,19 +286,17 @@ int main(int ac, char **av)
 			return (0);
 			break;
 		default: /* '?' */
-			ft_putendl("Usage: ./brut [-qcpe] [–aln number] \n"
-					"\t-q: quiet (no print except pthread log)\n"
+			ft_putendl("Usage: ./brut [-qce] [–alj number] \n"
+					"\t-q: quiet (suppress all output but pthread logs)\n"
 					"\t-l: limit set limit number of loop\n"
-					"\t-c: use calloc \n\t-p: pthread\n"
-					"\t-n set the number of pthread(default 2)\n"
-					"\t-e launch test error\n\t-a check align\n");
+					"\t-c: use calloc \n"
+					"\t-j set the number of threads (default 1)\n"
+					"\t-e launch test error\n"
+					"\t-a check align\n");
 			exit(EXIT_FAILURE);
 		}
 	}
 
-	if (g_flag.pthread)
-		check_pthread();
-	else
-		brut(NULL);
+	spawn_threads();
 	exit(0);
 };
