@@ -292,7 +292,12 @@ int main(int ac, char **av)
 			return (0);
 			break;
 		default: /* '?' */
-			puts("Usage: ./brut [-qcpe] [–aln number] \n\t-q: quiet (no print except pthread log)\n\t-l: limit set limit number of loop\n\t-c: use calloc \n\t-p: pthread\n\t-n set the number of pthread(default 2)\n\t-e launch test error\n\t-a check align\n");
+			puts("Usage: ./brut [-qcpe] [–aln number] \n"
+					"\t-q: quiet (no print except pthread log)\n"
+					"\t-l: limit set limit number of loop\n"
+					"\t-c: use calloc \n\t-p: pthread\n"
+					"\t-n set the number of pthread(default 2)\n"
+					"\t-e launch test error\n\t-a check align\n");
 			exit(EXIT_FAILURE);
 		}
 	}
