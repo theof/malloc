@@ -15,7 +15,6 @@
 #include <pthread.h>
 #include <assert.h>
 #include <string.h>
-#include <stdio.h>
 
 // Wrapper for define
 #define TINY_SIZE_BRUT TINY_SIZE
@@ -38,12 +37,13 @@ static void		ft_putchar(char c)
 static void		ft_putstr(char const *str)
 {
 	if (str)
-		write(1, str, strlen(str));
+		write(STDOUT_FILENO, str, strlen(str));
 }
 
 static void		ft_putendl(char const *str)
 {
-	puts(str);
+	ft_putstr(str);
+	write(STDOUT_FILENO, "\n", 1);
 }
 
 static void		ft_putnbr(int n)
@@ -240,7 +240,7 @@ void		check_pthread()
 		{
 				pthread_join(thread_id[i], NULL);
 				ft_putnbr(i);
-				puts(" + pthread OK");
+				ft_putendl(" + pthread OK");
 		}
 		count++;
 	}
@@ -250,16 +250,16 @@ static void check_error()
 {
 	char *str;
 
-	puts(" ================ BEGIN CHECK ERROR ================ ");
+	ft_putendl(" ================ BEGIN CHECK ERROR ================ ");
 	str = malloc(42);
 	free(str + 1);
 	free(str - 1);
 	if (realloc(str + 1, 43) || realloc(str - 1, 43))
-		puts("realloc error fail test");
+		ft_putendl("realloc error fail test");
 	free(str);
 	if (realloc(str, 42))
-		puts("realloc error fail test");
-	puts("================ END CHECK ERROR ================");	
+		ft_putendl("realloc error fail test");
+	ft_putendl("================ END CHECK ERROR ================");
 }
 
 
@@ -292,7 +292,7 @@ int main(int ac, char **av)
 			return (0);
 			break;
 		default: /* '?' */
-			puts("Usage: ./brut [-qcpe] [–aln number] \n"
+			ft_putendl("Usage: ./brut [-qcpe] [–aln number] \n"
 					"\t-q: quiet (no print except pthread log)\n"
 					"\t-l: limit set limit number of loop\n"
 					"\t-c: use calloc \n\t-p: pthread\n"
