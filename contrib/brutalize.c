@@ -10,6 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
+*	./brut -e => error
+*	./brut -c => calloc
+*	./brut -p => pthread
+*	./brut -l => limit
+*/
+
 #include "../include/malloc.h"
 #include <stdbool.h>
 #include <pthread.h>
@@ -20,14 +27,32 @@
 #define TINY_SIZE_BRUT TINY_SIZE
 #define MEDIUM_SIZE_BRUT SMALL_SIZE
 
+typedef struct	s_flag
+{
+	bool	quiet;
+	bool	calloc;
+	size_t	limit;
+	bool	pthread;
+	int		nbPthread;
+	bool	checkError;
+	int		align;
+}				t_flag;
 
-/*
-*	./brut -e => error
-*	./brut -c => calloc
-*	./brut -p => pthread
-*	./brut -l => limit
-*/
+typedef struct	s_data
+{
+	void		*ptr;
+	uint32_t	size;
+}				t_data;
 
+t_flag		g_flag = {
+	false,
+	false,
+	0,
+	false,
+	2,
+	false,
+	0
+};
 
 static void		ft_putchar(char c)
 {
@@ -67,32 +92,6 @@ static void		ft_putnbr(int n)
 		ft_putchar(number + '0');
 }
 
-typedef struct	s_flag
-{
-	bool	quiet;
-	bool	calloc;
-	size_t	limit;
-	bool	pthread;
-	int		nbPthread;
-	bool	checkError;
-	int		align;
-}				t_flag;
-
-typedef struct	s_data
-{
-	void		*ptr;
-	uint32_t	size;
-}				t_data;
-
-t_flag		g_flag = {
-	false,
-	false,
-	0,
-	false,
-	2,
-	false,
-	0
-};
 
 char		g_type_map[3][6] = {"TINY", "SMALL", "LARGE"};
 
