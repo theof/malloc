@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   brutalize.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/30 18:05:32 by tvallee           #+#    #+#             */
-/*   Updated: 2018/10/03 16:23:28 by gpouyat          ###   ########.fr       */
+/*   By: tvallee <tvallee@student.42.fr>            +#+  +:+       +#+        */
+/*       gpouyat <gpouyat@student.42.fr>          +#+#+#+#+#+   +#+           */
+/*                                                     #+#    #+#             */
+/*                                                    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,23 @@
 */
 
 
-void			ft_putchar(char c)
+static void		ft_putchar(char c)
 {
 	write(STDOUT_FILENO, &c, 1);
 }
 
-void			ft_putstr(char const *str)
+static void		ft_putstr(char const *str)
 {
 	if (str)
 		write(1, str, strlen(str));
 }
 
-void		ft_putendl(char const *str)
+static void		ft_putendl(char const *str)
 {
 	puts(str);
 }
 
-void	ft_putnbr(int n)
+static void		ft_putnbr(int n)
 {
 	unsigned int number;
 
