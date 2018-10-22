@@ -39,8 +39,9 @@ typedef struct	s_flag
 
 typedef struct	s_data
 {
-	void		*ptr;
-	uint32_t	size;
+	void				*ptr;
+	uint32_t			size;
+	pthread_mutex_t	mutex;
 }				t_data;
 
 t_flag		g_flag = {
@@ -177,9 +178,10 @@ static void use_calloc(t_data *current, unsigned *type)
 	}
 }
 
+t_data		g_table[200] = { {.ptr = NULL, .size = 0} };
+
 void *brut(void *argv)
 {
-	t_data		table[200] = { {.ptr = NULL, .size = 0 } };
 	t_data		*current;
 	unsigned	type;
 	size_t		count;
@@ -191,7 +193,12 @@ void *brut(void *argv)
 	{
 		g_flag.quiet ? : ft_putstr("\n=> new iteration: ");
 
-		current = &(table[arc4random_uniform(200)]);
+		current = &(g_table[arc4random_uniform(200)]);
+		if (pthread_mutex_lock(&current->mutex) != 0)
+		{
+			ft_putendl("pthread_mutex_lock error");
+			abort();
+		}
 		if (current->ptr == NULL)
 			g_flag.calloc ? use_calloc(current, &type) : use_malloc(current, &type);
 		else {
@@ -218,6 +225,11 @@ void *brut(void *argv)
 			}
 		}
 		fill_mem(current);
+		if (pthread_mutex_unlock(&current->mutex) != 0)
+		{
+			ft_putendl("pthread_mutex_unlock error");
+			abort();
+		}
 	}
 	return NULL;
 }
@@ -225,10 +237,20 @@ void *brut(void *argv)
 
 void		spawn_threads(void)
 {
-	pthread_t	thread_id[g_flag.nthread];
+	pthread_t			thread_id[g_flag.nthread];
+	pthread_mutexattr_t	attr;
 	size_t		count;
 
 	count = 0;
+	pthread_mutexattr_init(&attr);
+	for (int i = 0; i < sizeof(g_table) / sizeof(g_table[0]); i++)
+	{
+		if (pthread_mutex_init(&g_table[i].mutex, &attr) != 0)
+		{
+			ft_putendl("pthread_mutex_init failed");
+			abort();
+		}
+	}
 	while (!g_flag.limit || count++ < g_flag.limit)
 	{
 		for(int i = 0; i < g_flag.nthread; i++)
